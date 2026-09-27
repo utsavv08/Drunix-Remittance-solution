@@ -102,37 +102,58 @@
 <body class="text-slate-100 min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
 
   <!-- Top Institutional Ribbon -->
-  <div class="bg-gradient-to-r from-npci-saffron via-citi-azure to-npci-green h-1 w-full"></div>
+  <!-- Top Institutional Ribbon with Citi & NPCI Colors -->
+  <div class="bg-gradient-to-r from-npci-saffron via-citi-blue to-npci-green h-1 w-full"></div>
 
   <!-- Header Navigation -->
-  <header class="border-b border-citi-border/60 bg-[#050B14]/90 backdrop-blur-xl sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col lg:flex-row items-center justify-between gap-4">
+  <header class="border-b border-citi-border/60 bg-[#050B14]/95 backdrop-blur-xl sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col lg:flex-row items-center justify-between gap-4">
       
-      <!-- Brand & Dual Logos -->
-      <div class="flex items-center gap-3.5">
-        <div class="relative p-0.5 rounded-2xl npci-tri-border shadow-lg shadow-citi-blue/20">
-          <div class="w-11 h-11 bg-citi-surface rounded-[14px] flex items-center justify-center relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-tr from-citi-blue/40 via-transparent to-npci-saffron/20"></div>
-            <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-white to-orange-400 text-lg tracking-wider">CF</span>
+      <!-- Brand & Integrated Institutional Logos -->
+      <div class="flex items-center gap-4">
+        
+        <!-- CitiFlow Co-Branded Lockup -->
+        <div class="flex items-center gap-3">
+          <!-- Citi Official SVG Logo -->
+          <div class="flex items-center px-2.5 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:border-citi-blue transition-all">
+            <svg class="h-6 w-auto" viewBox="0 0 110 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Citi Text -->
+              <path d="M21 24.5C14.8 24.5 9.8 19.8 9.8 13.5C9.8 7.2 14.8 2.5 21 2.5C25.2 2.5 28.5 4.8 30.2 8.2L24.5 11.2C23.6 9.2 22.2 8.1 20.8 8.1C17.8 8.1 15.6 10.4 15.6 13.5C15.6 16.6 17.8 18.9 20.8 18.9C22.5 18.9 23.8 17.8 24.7 15.9L30.4 18.7C28.7 22.2 25.2 24.5 21 24.5Z" fill="#FFFFFF"/>
+              <path d="M37 2H42.5V24H37V2Z" fill="#FFFFFF"/>
+              <path d="M51 7V2H56.5V7H62V12H56.5V24H51V12H46.5V7H51Z" fill="#FFFFFF"/>
+              <path d="M70 2H75.5V24H70V2Z" fill="#FFFFFF"/>
+              <!-- Citi Iconic Red Arc over the 'i' and 't' -->
+              <path d="M39.5 4C47.5 -2 64.5 -2 72.5 4C67.5 1.5 49 0.5 39.5 4Z" fill="#ED1C24"/>
+            </svg>
+          </div>
+
+          <span class="text-slate-600 font-light text-lg">✕</span>
+
+          <!-- NPCI Official SVG Logo -->
+          <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:border-npci-saffron transition-all">
+            <svg class="h-6 w-auto" viewBox="0 0 100 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- NPCI Tri-color Pinwheel Badges -->
+              <path d="M8 6C12 3 17 4 19 8L15 11C14 9 11 8 8 10L8 6Z" fill="#EF7102"/>
+              <path d="M21 12C23 16 22 21 18 23L16 19C18 17 18 14 16 12L21 12Z" fill="#018136"/>
+              <path d="M14 25C10 26 5 24 3 20L7 18C8 20 11 21 14 19L14 25Z" fill="#242D7A"/>
+              <!-- NPCI Text -->
+              <text x="27" y="21" fill="#FFFFFF" font-family="'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="14" letter-spacing="1">NPCI</text>
+            </svg>
+          </div>
+
+          <span class="text-slate-600 font-light text-lg">✕</span>
+
+          <!-- Drunix Network L1 Badge -->
+          <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-cyan-950/40 border border-citi-cyan/40 hover:border-citi-cyan transition-all">
+            <svg class="h-5 w-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            <span class="font-extrabold text-xs text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-300">Drunix L1</span>
           </div>
         </div>
 
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-1">
-              <span>Citi</span><span class="text-cyan-400">Flow</span>
-            </h1>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-citi-blue/60 border border-citi-cyan/40 text-cyan-200">
-              Escrow DvP
-            </span>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-npci-persian/60 border border-npci-saffron/40 text-orange-200">
-              Bharat Rails
-            </span>
-          </div>
-          <p class="text-[11px] text-slate-400 font-medium">
-            Drunix Blockchain × Citi Global Treasury × NPCI Real-Time Infrastructure
-          </p>
-        </div>
       </div>
 
       <!-- Live Network & FX Badges -->
@@ -140,23 +161,23 @@
         <!-- Drunix Node Badge -->
         <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-card border border-citi-border text-xs font-medium text-slate-300">
           <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-          <span>Drunix EVM: <strong class="text-white">Active</strong></span>
+          <span>Drunix EVM: <strong class="text-white">Block #4,819,201</strong></span>
         </div>
 
         <!-- Citi Treasury Spot FX -->
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-card border border-citi-azure/40 text-xs text-blue-200">
           <span>Citi FX Desk: <strong>1 USD = ₹84.25</strong></span>
-          <span class="text-[10px] text-cyan-300 font-mono font-bold">(Spot Lock)</span>
+          <span class="text-[10px] text-cyan-300 font-mono font-bold">(Spot Locked)</span>
         </div>
 
         <!-- NPCI 2.0 Rails Status -->
         <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-card border border-npci-emerald/40 text-xs text-emerald-300">
           <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span>NPCI UPI 2.0 & e-RUPI: <strong class="text-white">Active</strong></span>
+          <span>UPI 2.0 & e-RUPI: <strong class="text-white">Active</strong></span>
         </div>
 
         <!-- Refresh Button -->
-        <button onclick="fetchDeals()" class="p-2 rounded-xl glass-card border border-citi-border hover:border-citi-cyan text-slate-300 hover:text-white transition-all" title="Sync on-chain state">
+        <button onclick="fetchDeals()" class="p-2 rounded-xl glass-card border border-citi-border hover:border-citi-cyan text-slate-300 hover:text-white transition-all shadow" title="Sync on-chain state">
           🔄
         </button>
       </div>
@@ -175,6 +196,66 @@
   <!-- Main Workspace -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
     
+    <!-- Institutional Partner Strip -->
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 p-3 rounded-2xl bg-citi-surface/60 border border-citi-border/80 text-[11px]">
+      
+      <!-- Partner 1: Citi Treasury -->
+      <div class="flex items-center gap-2.5 p-2 rounded-xl bg-citi-dark/60 border border-citi-border/50">
+        <div class="w-7 h-7 rounded-lg bg-[#00284D] flex items-center justify-center font-bold text-white text-[10px] border border-citi-blue/60">
+          citi
+        </div>
+        <div>
+          <span class="font-bold text-white block">Citi Treasury</span>
+          <span class="text-[10px] text-cyan-300">ISO 20022 pacs.008</span>
+        </div>
+      </div>
+
+      <!-- Partner 2: NPCI UPI 2.0 -->
+      <div class="flex items-center gap-2.5 p-2 rounded-xl bg-citi-dark/60 border border-citi-border/50">
+        <div class="w-7 h-7 rounded-lg bg-orange-950/80 flex items-center justify-center font-bold text-npci-saffron text-[10px] border border-npci-saffron/60">
+          UPI
+        </div>
+        <div>
+          <span class="font-bold text-white block">NPCI UPI 2.0</span>
+          <span class="text-[10px] text-orange-300">Real-Time Mandates</span>
+        </div>
+      </div>
+
+      <!-- Partner 3: e-RUPI -->
+      <div class="flex items-center gap-2.5 p-2 rounded-xl bg-citi-dark/60 border border-citi-border/50">
+        <div class="w-7 h-7 rounded-lg bg-emerald-950/80 flex items-center justify-center font-bold text-emerald-400 text-[10px] border border-emerald-600/60">
+          ₹
+        </div>
+        <div>
+          <span class="font-bold text-white block">e-RUPI Digital</span>
+          <span class="text-[10px] text-emerald-300">Programmable Purpose</span>
+        </div>
+      </div>
+
+      <!-- Partner 4: Drunix Smart Contracts -->
+      <div class="flex items-center gap-2.5 p-2 rounded-xl bg-citi-dark/60 border border-citi-border/50">
+        <div class="w-7 h-7 rounded-lg bg-indigo-950/80 flex items-center justify-center font-bold text-indigo-400 text-[10px] border border-indigo-600/60">
+          Dx
+        </div>
+        <div>
+          <span class="font-bold text-white block">Drunix Escrow</span>
+          <span class="text-[10px] text-indigo-300">Atomic DvP Settlement</span>
+        </div>
+      </div>
+
+      <!-- Partner 5: ICEGATE / Customs -->
+      <div class="flex items-center gap-2.5 p-2 rounded-xl bg-citi-dark/60 border border-citi-border/50 col-span-2 sm:col-span-1">
+        <div class="w-7 h-7 rounded-lg bg-cyan-950/80 flex items-center justify-center font-bold text-cyan-400 text-[10px] border border-cyan-600/60">
+          🏛️
+        </div>
+        <div>
+          <span class="font-bold text-white block">ICEGATE Oracle</span>
+          <span class="text-[10px] text-cyan-300">Automated Attestation</span>
+        </div>
+      </div>
+
+    </div>
+
     <!-- Top Controls: Active Agreement Switcher & Actions -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div class="flex items-center gap-3 flex-wrap">
@@ -456,27 +537,58 @@
         </div>
 
         <!-- 1-Click NPCI Rails -->
+        <!-- 1-Click NPCI Rails -->
         <div class="space-y-2">
           <span class="text-xs font-bold text-slate-300 block">1-Click NPCI Real-Time UPI Execution:</span>
           <div class="grid grid-cols-2 gap-2.5">
-            <button onclick="simulatePay('GooglePay')" class="p-3 rounded-xl bg-citi-surface hover:bg-citi-card border border-citi-border text-left text-xs font-medium text-white transition-all">
-              ⚡ Pay via <strong>Google Pay</strong>
+            <!-- Google Pay -->
+            <button onclick="simulatePay('GooglePay')" class="p-3 rounded-xl bg-citi-surface hover:bg-citi-card border border-citi-border text-left text-xs font-medium text-white transition-all flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-white flex items-center justify-center font-bold text-slate-900 text-[10px] shadow-sm">G</span>
+              <div>
+                <span class="font-bold block">Google Pay</span>
+                <span class="text-[10px] text-slate-400">NPCI Intent</span>
+              </div>
             </button>
-            <button onclick="simulatePay('PhonePe')" class="p-3 rounded-xl bg-citi-surface hover:bg-citi-card border border-citi-border text-left text-xs font-medium text-white transition-all">
-              🟣 Pay via <strong>PhonePe</strong>
+
+            <!-- PhonePe -->
+            <button onclick="simulatePay('PhonePe')" class="p-3 rounded-xl bg-citi-surface hover:bg-citi-card border border-citi-border text-left text-xs font-medium text-white transition-all flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-[#5f259f] flex items-center justify-center font-bold text-white text-[10px] shadow-sm">पे</span>
+              <div>
+                <span class="font-bold block">PhonePe</span>
+                <span class="text-[10px] text-slate-400">UPI Autopay</span>
+              </div>
             </button>
-            <button onclick="simulatePay('BHIM')" class="p-3 rounded-xl bg-citi-surface hover:bg-citi-card border border-citi-border text-left text-xs font-medium text-white transition-all">
-              🇮🇳 Pay via <strong>BHIM UPI</strong>
+
+            <!-- BHIM UPI -->
+            <button onclick="simulatePay('BHIM')" class="p-3 rounded-xl bg-citi-surface hover:bg-citi-card border border-citi-border text-left text-xs font-medium text-white transition-all flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-npci-saffron flex items-center justify-center font-bold text-white text-[10px] shadow-sm">🇮🇳</span>
+              <div>
+                <span class="font-bold block">BHIM UPI 2.0</span>
+                <span class="text-[10px] text-slate-400">Sovereign Rail</span>
+              </div>
             </button>
-            <button onclick="simulatePay('CitiMobile')" class="p-3 rounded-xl bg-citi-blue/60 hover:bg-citi-blue border border-citi-azure text-left text-xs font-medium text-cyan-200 transition-all">
-              🏦 Pay via <strong>Citi Mobile</strong>
+
+            <!-- Citi Mobile -->
+            <button onclick="simulatePay('CitiMobile')" class="p-3 rounded-xl bg-citi-blue/60 hover:bg-citi-blue border border-citi-azure text-left text-xs font-medium text-cyan-200 transition-all flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-[#002d72] flex items-center justify-center font-bold text-white text-[9px] border border-citi-azure/50">citi</span>
+              <div>
+                <span class="font-bold block text-white">Citi Mobile</span>
+                <span class="text-[10px] text-cyan-300">Direct Debit</span>
+              </div>
             </button>
           </div>
         </div>
 
         <!-- Citi Corporate Vault Wire -->
-        <button onclick="simulateCitiVaultLock()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-citi-blue via-citi-azure to-cyan-500 hover:from-citi-navy hover:to-cyan-400 text-white font-extrabold text-xs shadow-xl shadow-citi-azure/20 flex items-center justify-center gap-2 transition-all">
-          <span>🏛️ Lock in Citi Corporate Escrow Vault (ISO 20022 camt.053)</span>
+        <button onclick="simulateCitiVaultLock()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-citi-blue via-citi-azure to-cyan-500 hover:from-citi-navy hover:to-cyan-400 text-white font-extrabold text-xs shadow-xl shadow-citi-azure/20 flex items-center justify-center gap-2.5 transition-all">
+          <svg class="h-4 w-auto" viewBox="0 0 110 32" fill="none">
+            <path d="M21 24.5C14.8 24.5 9.8 19.8 9.8 13.5C9.8 7.2 14.8 2.5 21 2.5C25.2 2.5 28.5 4.8 30.2 8.2L24.5 11.2C23.6 9.2 22.2 8.1 20.8 8.1C17.8 8.1 15.6 10.4 15.6 13.5C15.6 16.6 17.8 18.9 20.8 18.9C22.5 18.9 23.8 17.8 24.7 15.9L30.4 18.7C28.7 22.2 25.2 24.5 21 24.5Z" fill="#FFFFFF"/>
+            <path d="M37 2H42.5V24H37V2Z" fill="#FFFFFF"/>
+            <path d="M51 7V2H56.5V7H62V12H56.5V24H51V12H46.5V7H51Z" fill="#FFFFFF"/>
+            <path d="M70 2H75.5V24H70V2Z" fill="#FFFFFF"/>
+            <path d="M39.5 4C47.5 -2 64.5 -2 72.5 4C67.5 1.5 49 0.5 39.5 4Z" fill="#ED1C24"/>
+          </svg>
+          <span>Lock in Citi Corporate Escrow Vault (ISO 20022 camt.053)</span>
         </button>
       </div>
 
@@ -569,12 +681,17 @@
     </div>
   </div>
 
-  <footer class="border-t border-citi-border/60 bg-[#050B14] py-6 text-center text-xs text-slate-400">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-      <p>CitiFlow Escrow • Drunix Hackathon in collaboration with Citi & India Blockchain Forum</p>
+  <footer class="border-t border-citi-border/60 bg-[#050B14] py-6 text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="font-extrabold text-white">CitiFlow Escrow</span>
+        <span class="text-slate-600">•</span>
+        <span>Drunix Hackathon (CHL-7007) in collaboration with <strong>Citi</strong> & <strong>India Blockchain Forum</strong></span>
+      </div>
       <div class="flex items-center gap-2">
-        <span class="text-[10px] px-2 py-0.5 rounded bg-citi-blue/40 text-cyan-300 font-mono">ISO 20022 Enabled</span>
-        <span class="text-[10px] px-2 py-0.5 rounded bg-npci-emerald/40 text-emerald-300 font-mono">NPCI 2.0 Compliant</span>
+        <span class="text-[10px] px-2.5 py-1 rounded-lg bg-citi-blue/40 border border-citi-azure/40 text-cyan-300 font-mono">ISO 20022 Enabled</span>
+        <span class="text-[10px] px-2.5 py-1 rounded-lg bg-npci-emerald/40 border border-emerald-500/40 text-emerald-300 font-mono">NPCI 2.0 Compliant</span>
+        <span class="text-[10px] px-2.5 py-1 rounded-lg bg-purple-950/40 border border-purple-500/40 text-purple-300 font-mono">Drunix EVM</span>
       </div>
     </div>
   </footer>
