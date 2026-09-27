@@ -119,6 +119,34 @@ class handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path.rstrip("/")
 
+        if not path.startswith("/api"):
+            rel_path = path.lstrip("/")
+            if not rel_path or rel_path == "":
+                rel_path = "index.html"
+            
+            root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            file_path = os.path.join(root_dir, "public", rel_path)
+            if not os.path.exists(file_path):
+                file_path = os.path.join(root_dir, rel_path)
+            
+            if os.path.exists(file_path) and os.path.isfile(file_path):
+                import mimetypes
+                mime_type, _ = mimetypes.guess_type(file_path)
+                mime_type = mime_type or "application/octet-stream"
+                self.send_response(200)
+                self.send_header("Content-Type", mime_type)
+                self.send_header("Content-Length", str(os.path.getsize(file_path)))
+                self._send_cors_headers()
+                self.end_headers()
+                with open(file_path, "rb") as f:
+                    self.wfile.write(f.read())
+                return
+            else:
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(b"File not found")
+                return
+
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self._send_cors_headers()
@@ -420,3 +448,18 @@ class handler(BaseHTTPRequestHandler):
         # Fallback to general Remittance endpoint
         resp = {"success": True, "message": "Action processed", "deal": deal}
         self.wfile.write(json.dumps(resp).encode("utf-8"))
+
+if __name__ == "__main__":
+    from http.server import HTTPServer
+    port = int(os.environ.get("PORT", 8000))
+    server = HTTPServer(("0.0.0.0", port), handler)
+    print(f"================================================================")
+    print(f" 🏛️ CitiFlow Escrow — Institutional Trade Portal & API Server")
+    print(f" Running at: http://localhost:{port}")
+    print(f" Network: Drunix L1 Blockchain (Mock Testnet)")
+    print(f" Settlement Rails: Citi ISO 20022 + NPCI UPI 2.0 / e-RUPI")
+    print(f"================================================================")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nShutting down CitiFlow server.")
