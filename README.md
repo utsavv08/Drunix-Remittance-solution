@@ -112,9 +112,9 @@ sequenceDiagram
   * **Customs Integration:** Indian Customs ICEGATE Out-of-Charge (OOC) approval.
   * **IoT Telemetry:** GPS geofence, temperature, and vibration threshold monitoring.
 
-### 4. Full-Width Citibank Institutional Cockpit
-* Edge-to-edge, clean Citibank corporate visual standard (`#002d72`, `#056dae`, `#ed1c24`).
-* Fully mobile-responsive interface with touch-optimized controls, real-time FX polling, and embedded 16:9 institutional video showcase.
+### 4. Live Trade Execution & Monitoring Interface
+* Responsive institutional trade portal with touch-optimized controls, real-time FX rate polling, and integrated operational video walkthrough.
+* Unified telemetry monitoring across buyer, seller, customs oracle, and bank settlement rails.
 
 ---
 
@@ -143,7 +143,7 @@ cd Drunix-Remittance-solution
 pip install -r requirements.txt
 ```
 
-### 3. Launch the Full-Stack Citibank Cockpit
+### 3. Launch the Trade Portal
 Start the backend server and open the web dashboard:
 ```bash
 python -m http.server 8000
@@ -173,10 +173,11 @@ OK (All 18 tests passed)
 ```
 drunix-remittance-check/
 ├── public/
-│   ├── index.html                   # Full-Width Citibank Institutional Cockpit
+│   ├── index.html                   # Web Trade Portal & Execution Cockpit
 │   ├── images/
 │   │   ├── citi_logo.png            # Official Citibank logo asset
-│   │   └── npci_logo.png            # High-resolution transparent NPCI logo asset
+│   │   ├── npci_logo.png            # High-resolution transparent NPCI logo asset
+│   │   └── citiflow_cockpit_preview.png # Application interface preview
 │   └── videos/
 │       └── citiflow_showcase.mp4    # 16:9 4K Operational showcase video
 ├── core/
@@ -193,17 +194,9 @@ drunix-remittance-check/
 │   └── simulator.py                 # Citi ISO 20022 & NPCI payment simulator
 ├── tests/
 │   └── test_all.py                  # Complete 18-test automated suite
-├── CitiFlow_Escrow_Pitch_Deck.pptx  # 16:9 Widescreen PowerPoint presentation
 ├── README.md                        # Master project documentation
 └── requirements.txt                 # Project dependencies
 ```
-
----
-
-## 📑 Pitch Deck & Presentation
-
-* **PowerPoint Deck:** [`CitiFlow_Escrow_Pitch_Deck.pptx`](CitiFlow_Escrow_Pitch_Deck.pptx)
-* **Markdown Deck:** [`citiflow_escrow_pitch_deck.md`](citiflow_escrow_pitch_deck.md)
 
 ---
 
