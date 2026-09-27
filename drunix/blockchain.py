@@ -2,7 +2,7 @@ import uuid
 import logging
 from enum import Enum
 from typing import Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("DrunixBlockchain")
@@ -24,7 +24,7 @@ class EscrowContract:
         self.amount = amount
         self.currency = currency
         self.status = EscrowStatus.CREATED
-        self.created_at = datetime.utcnow()
+        self.created_at = datetime.now(timezone.utc)
         self.updated_at = self.created_at
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,7 +69,7 @@ class DrunixBlockchainSim:
     def fund_escrow_contract(self, contract_id, amount):
         if contract_id in self._ledger:
             self._ledger[contract_id].status = EscrowStatus.FUNDED
-            self._ledger[contract_id].updated_at = datetime.utcnow()
+            self._ledger[contract_id].updated_at = datetime.now(timezone.utc)
             logger.info(f"Escrow funded: {contract_id} with {amount}")
             return True
         return False
@@ -77,7 +77,7 @@ class DrunixBlockchainSim:
     def disburse_escrow_contract(self, contract_id):
         if contract_id in self._ledger:
             self._ledger[contract_id].status = EscrowStatus.DISBURSED
-            self._ledger[contract_id].updated_at = datetime.utcnow()
+            self._ledger[contract_id].updated_at = datetime.now(timezone.utc)
             logger.info(f"Escrow disbursed: {contract_id}")
             return True
         return False
@@ -85,7 +85,7 @@ class DrunixBlockchainSim:
     def refund_escrow_contract(self, contract_id):
         if contract_id in self._ledger:
             self._ledger[contract_id].status = EscrowStatus.REFUNDED
-            self._ledger[contract_id].updated_at = datetime.utcnow()
+            self._ledger[contract_id].updated_at = datetime.now(timezone.utc)
             logger.info(f"Escrow refunded: {contract_id}")
             return True
         return False
@@ -116,7 +116,7 @@ class DrunixBlockchainSim:
             return False
 
         contract.status = EscrowStatus.DISBURSED
-        contract.updated_at = datetime.utcnow()
+        contract.updated_at = datetime.now(timezone.utc)
         logger.info(f"Contract {contract_id} successfully DISBURSED to {contract.recipient}.")
         return True
 

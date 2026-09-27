@@ -1,5 +1,5 @@
 import enum
-from datetime import datetime
+from datetime import datetime, timezone
 from dataclasses import dataclass, field
 from decimal import Decimal
 
@@ -31,7 +31,7 @@ class EscrowAccount:
     currency: str
     milestones: list[Milestone]
     status: EscrowStatus = EscrowStatus.PENDING
-    created_at: datetime = field(default_factory=datetime.utcnow)
+    created_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     balance: Decimal = Decimal('0.00')
 
 @dataclass
@@ -43,4 +43,4 @@ class RemittanceRecord:
     amount: Decimal
     currency: str
     escrow_id: str
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))

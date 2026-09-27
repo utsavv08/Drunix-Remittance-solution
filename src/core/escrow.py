@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from enum import Enum
 from typing import Dict, Optional
 from drunix import DrunixPlatform
@@ -18,7 +18,7 @@ class EscrowTransaction:
         self.amount = amount
         self.currency = currency
         self.status = EscrowStatus.PENDING
-        self.created_at = datetime.utcnow()
+        self.created_at = datetime.now(timezone.utc)
         self.release_deadline = self.created_at + timedelta(days=timeout_days)
 
 class EscrowManager:
@@ -113,7 +113,7 @@ class EscrowManager:
         Scans ledger for expired transactions and processes automated release or dispute handling.
         Normally ran by a scheduled job.
         """
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         for txn_id, txn in self._escrow_ledger.items():
             if txn.status == EscrowStatus.HELD and now > txn.release_deadline:
                 # Automated logic here: simple release in this flow

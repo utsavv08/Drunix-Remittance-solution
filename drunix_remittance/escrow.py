@@ -1,5 +1,5 @@
 from decimal import Decimal
-from datetime import datetime
+from datetime import datetime, timezone
 from drunix_remittance.models import EscrowAccount, EscrowStatus, Milestone
 
 class EscrowError(Exception):
@@ -103,7 +103,7 @@ class EscrowService:
             raise MilestoneError(f"Milestone {milestone_id} already completed.")
 
         milestone.is_completed = True
-        milestone.completed_at = datetime.utcnow()
+        milestone.completed_at = datetime.now(timezone.utc)
         released_amount = milestone.amount
 
         escrow.balance -= released_amount
