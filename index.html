@@ -4,418 +4,579 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CitiFlow Escrow — Programmable Real-Time Trade Settlements on Drunix</title>
+  
+  <!-- Tailwind CSS & Canvas Confetti -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  
+  <!-- Fonts: Inter / Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            citi: {
+              navy: '#00284D',
+              blue: '#003B70',
+              azure: '#0070BA',
+              cyan: '#00A3E0',
+              red: '#ED1C24',
+              surface: '#0B1528',
+              card: '#101E38',
+              border: '#1E3258'
+            },
+            npci: {
+              saffron: '#EF7102',
+              orange: '#FF671F',
+              green: '#018136',
+              emerald: '#046A38',
+              persian: '#242D7A'
+            },
+            drunix: {
+              dark: '#050B14',
+              purple: '#6366F1',
+              glow: '#00F2FE'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #090d16; }
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    body {
+      background-color: #050B14;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 59, 112, 0.25) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(1, 129, 54, 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(239, 113, 2, 0.08) 0px, transparent 50%);
+    }
+
+    .citi-arc {
+      position: relative;
+    }
+    .citi-arc::after {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #ED1C24, #00A3E0, transparent);
+      border-radius: 9999px;
+    }
+
+    .npci-tri-border {
+      background: linear-gradient(135deg, rgba(239, 113, 2, 0.4), rgba(0, 163, 224, 0.4), rgba(1, 129, 54, 0.4));
+    }
+
+    .glass-card {
+      background: rgba(16, 30, 56, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(30, 50, 88, 0.8);
+    }
+
+    .glass-card-interactive:hover {
+      border-color: rgba(0, 163, 224, 0.6);
+      box-shadow: 0 10px 30px -10px rgba(0, 112, 186, 0.3);
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #050B14; }
+    ::-webkit-scrollbar-thumb { background: #1E3258; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #0070BA; }
   </style>
 </head>
-<body class="bg-[#090d16] text-slate-100 min-h-screen flex flex-col selection:bg-cyan-500 selection:text-black">
+<body class="text-slate-100 min-h-screen flex flex-col antialiased selection:bg-cyan-500 selection:text-black">
 
-  <!-- Header -->
-  <header class="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
+  <!-- Top Institutional Ribbon -->
+  <div class="bg-gradient-to-r from-npci-saffron via-citi-azure to-npci-green h-1 w-full"></div>
+
+  <!-- Header Navigation -->
+  <header class="border-b border-citi-border/60 bg-[#050B14]/90 backdrop-blur-xl sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col lg:flex-row items-center justify-between gap-4">
       
-      <!-- Brand & Logos -->
-      <div class="flex items-center gap-3">
-        <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 p-0.5 shadow-lg shadow-indigo-500/20">
-          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center font-black text-cyan-400">
-            CF
+      <!-- Brand & Dual Logos -->
+      <div class="flex items-center gap-3.5">
+        <div class="relative p-0.5 rounded-2xl npci-tri-border shadow-lg shadow-citi-blue/20">
+          <div class="w-11 h-11 bg-citi-surface rounded-[14px] flex items-center justify-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-tr from-citi-blue/40 via-transparent to-npci-saffron/20"></div>
+            <span class="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-white to-orange-400 text-lg tracking-wider">CF</span>
           </div>
         </div>
+
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-300 to-cyan-300">
-              CitiFlow
-            </span>
-            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-700/50 text-cyan-300">
+            <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-1">
+              <span>Citi</span><span class="text-cyan-400">Flow</span>
+            </h1>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-citi-blue/60 border border-citi-cyan/40 text-cyan-200">
               Escrow DvP
             </span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-npci-persian/60 border border-npci-saffron/40 text-orange-200">
+              Bharat Rails
+            </span>
           </div>
-          <p class="text-xs text-slate-400 font-medium">
-            Drunix Blockchain × Citi Treasury × NPCI Real-Time Rails
+          <p class="text-[11px] text-slate-400 font-medium">
+            Drunix Blockchain × Citi Global Treasury × NPCI Real-Time Infrastructure
           </p>
         </div>
       </div>
 
-      <!-- Live Badges & Rates -->
+      <!-- Live Network & FX Badges -->
       <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-        <div class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-950/50 border border-indigo-800/40 text-xs font-medium text-indigo-300">
-          <span>Network: <strong class="text-white">Drunix EVM</strong></span>
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse ml-0.5"></span>
+        <!-- Drunix Node Badge -->
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-card border border-citi-border text-xs font-medium text-slate-300">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+          <span>Drunix EVM: <strong class="text-white">Active</strong></span>
         </div>
 
-        <div class="flex items-center gap-2 px-3 py-1 rounded-lg bg-blue-950/40 border border-blue-800/40 text-xs text-blue-200">
-          <span>Citi Spot FX: <strong>1 USD = ₹84.25</strong></span>
-          <span class="text-[10px] text-blue-400/80">(0.02% spread)</span>
+        <!-- Citi Treasury Spot FX -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-card border border-citi-azure/40 text-xs text-blue-200">
+          <span>Citi FX Desk: <strong>1 USD = ₹84.25</strong></span>
+          <span class="text-[10px] text-cyan-300 font-mono font-bold">(Spot Lock)</span>
         </div>
 
-        <div class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-950/40 border border-emerald-800/40 text-xs text-emerald-300">
-          <span>NPCI 2.0 Rails: <strong class="text-white">Active</strong></span>
+        <!-- NPCI 2.0 Rails Status -->
+        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-card border border-npci-emerald/40 text-xs text-emerald-300">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>NPCI UPI 2.0 & e-RUPI: <strong class="text-white">Active</strong></span>
         </div>
 
-        <button onclick="fetchDeals()" class="p-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition-colors" title="Refresh state">
+        <!-- Refresh Button -->
+        <button onclick="fetchDeals()" class="p-2 rounded-xl glass-card border border-citi-border hover:border-citi-cyan text-slate-300 hover:text-white transition-all" title="Sync on-chain state">
           🔄
         </button>
       </div>
+
     </div>
   </header>
 
   <!-- Toast Notification -->
   <div id="toast" class="hidden fixed bottom-6 right-6 z-50 animate-bounce">
-    <div class="px-4 py-3 rounded-xl bg-slate-900 border border-cyan-500/50 shadow-2xl text-xs font-semibold text-white flex items-center gap-2.5">
-      <span class="text-cyan-400">✨</span>
-      <span id="toastText">Action Completed</span>
+    <div class="px-5 py-3.5 rounded-2xl glass-card border border-citi-cyan shadow-2xl text-xs font-bold text-white flex items-center gap-3">
+      <span class="text-base text-cyan-400">⚡</span>
+      <span id="toastText">Action completed successfully</span>
     </div>
   </div>
 
-  <!-- Main Container -->
+  <!-- Main Workspace -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
     
-    <!-- Top Controls: Deal Selector & Create Button -->
+    <!-- Top Controls: Active Agreement Switcher & Actions -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
       <div class="flex items-center gap-3 flex-wrap">
-        <label class="text-xs font-semibold text-slate-400">Active Trade Agreement:</label>
-        <select id="dealSelect" onchange="onSelectDeal(this.value)" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-white focus:outline-none focus:border-cyan-500 font-mono">
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Active Commercial Agreement:</span>
+        <select id="dealSelect" onchange="onSelectDeal(this.value)" class="px-3.5 py-2 rounded-xl bg-citi-surface border border-citi-border text-xs font-bold text-white focus:outline-none focus:border-citi-cyan font-mono shadow-inner">
           <!-- Populated dynamically -->
         </select>
       </div>
 
-      <button onclick="openCreateModal()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-white flex items-center gap-2 transition-all shadow">
-        <span class="text-cyan-400">➕</span>
-        <span>New Trade Deal</span>
-      </button>
+      <div class="flex items-center gap-2">
+        <button onclick="openVideoModal()" class="px-3.5 py-2 rounded-xl bg-citi-surface hover:bg-citi-card border border-citi-border hover:border-citi-cyan text-xs font-bold text-cyan-300 flex items-center gap-1.5 transition-all shadow">
+          <span>🎬 Architecture Video Walkthrough</span>
+        </button>
+        <button onclick="openCreateModal()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-citi-azure to-cyan-500 hover:from-citi-blue hover:to-cyan-400 text-white text-xs font-bold flex items-center gap-2 transition-all shadow-lg shadow-citi-azure/20">
+          <span>➕ New Trade Agreement</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Hero Trade Summary Card -->
-    <div class="bg-gradient-to-br from-slate-900 via-slate-900/90 to-blue-950/40 border border-slate-800 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+    <!-- Master Trade Cockpit Hero Card -->
+    <div class="relative rounded-3xl glass-card citi-arc p-6 sm:p-8 shadow-2xl overflow-hidden border border-citi-border">
       
-      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
         
-        <div class="space-y-2">
-          <div class="flex items-center gap-2 flex-wrap">
-            <span id="dealRefBadge" class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-md bg-blue-950 border border-blue-800/80 text-blue-300">
+        <!-- Left Deal Overview -->
+        <div class="space-y-2.5 max-w-2xl">
+          <div class="flex items-center gap-2.5 flex-wrap">
+            <span id="dealRefBadge" class="text-xs font-mono font-extrabold px-3 py-1 rounded-lg bg-citi-blue/50 border border-citi-cyan/50 text-cyan-300">
               PO-BHARAT-PUMP-9821
             </span>
             <span class="text-xs text-slate-400 font-medium">
-              Linked Escrow: <strong id="escrowAccountBadge" class="text-slate-200">CITI-IN-ESC-482910482</strong>
+              Institutional Vault: <strong id="escrowAccountBadge" class="text-white font-mono">CITI-IN-ESC-482910482</strong>
             </span>
           </div>
 
-          <h2 id="buyerNameHeader" class="text-2xl font-extrabold text-white tracking-tight">
+          <h2 id="buyerNameHeader" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
             Bharat Solar Infrastructures Ltd (Mumbai, India)
           </h2>
           
-          <div class="flex items-center gap-2 text-xs text-slate-400 flex-wrap">
-            <span>Supplier: <strong id="sellerNameText" class="text-slate-200">Nordic Turbine Technologies AG</strong></span>
-            <span>•</span>
-            <span>Port of Origin: <strong id="originPortText" class="text-slate-300">Port of Hamburg (DEHAM)</strong></span>
+          <div class="flex items-center gap-3 text-xs text-slate-300 flex-wrap">
+            <span>Global Supplier: <strong id="sellerNameText" class="text-cyan-300">Nordic Turbine Technologies AG</strong></span>
+            <span class="text-slate-600">•</span>
+            <span>Origin Port: <strong id="originPortText" class="text-slate-200">Port of Hamburg (DEHAM)</strong></span>
+            <span class="text-slate-600">•</span>
+            <span>Destination: <strong class="text-emerald-300">Nhava Sheva JNPT (INNSA)</strong></span>
           </div>
         </div>
 
+        <!-- Right Value Meter & Action -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div class="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800/90 text-right min-w-[200px]">
-            <span class="text-[11px] text-slate-400 block font-medium">Total Deal Escrow Value</span>
-            <span id="totalUsdText" class="text-xl font-extrabold text-white font-mono block">
+          <div class="p-4 rounded-2xl bg-citi-dark/80 border border-citi-border text-right min-w-[220px]">
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Escrow Capital</span>
+            <span id="totalUsdText" class="text-2xl font-extrabold text-white font-mono block">
               $50,000.00 USD
             </span>
-            <span id="totalInrText" class="text-xs font-bold text-cyan-400 font-mono">
-              ₹42,12,500 (Spot Locked)
+            <span id="totalInrText" class="text-xs font-bold text-npci-saffron font-mono block mt-0.5">
+              ₹42,12,500 (Spot Hedged)
             </span>
           </div>
 
           <div id="lockFundsContainer">
-            <button onclick="openPaymentModal()" class="px-6 py-4 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-cyan-400 hover:from-orange-400 hover:to-cyan-300 text-slate-950 font-extrabold text-sm shadow-xl shadow-amber-500/20 flex items-center gap-2 transition-all">
-              <span>🔒 Lock Funds via UPI / Citi Escrow</span>
-            </button>
+            <!-- Dynamic button inserted here -->
           </div>
         </div>
 
       </div>
 
-      <!-- Quick Metrics Strip -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-slate-800/80 text-xs">
-        <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">
-          <span class="text-slate-400 block text-[10px]">Escrow Status</span>
-          <span id="metricStatus" class="font-bold text-white font-mono uppercase">CREATED</span>
+      <!-- Quick Metrics Ribbon -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mt-8 pt-6 border-t border-citi-border/80 text-xs">
+        <div class="p-3.5 rounded-2xl bg-citi-surface/80 border border-citi-border">
+          <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Escrow Protocol State</span>
+          <span id="metricStatus" class="font-extrabold text-white font-mono uppercase mt-0.5 block">CREATED</span>
         </div>
-        <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">
-          <span class="text-slate-400 block text-[10px]">Settled Capital</span>
-          <span id="metricSettled" class="font-bold text-emerald-400 font-mono">0% ($0.00)</span>
+        <div class="p-3.5 rounded-2xl bg-citi-surface/80 border border-citi-border">
+          <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Capital Disbursed</span>
+          <span id="metricSettled" class="font-extrabold text-emerald-400 font-mono mt-0.5 block">0% ($0.00)</span>
         </div>
-        <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">
-          <span class="text-slate-400 block text-[10px]">Payment Rail</span>
-          <span class="font-bold text-cyan-300 font-mono">NPCI UPI 2.0 / Citi ISO</span>
+        <div class="p-3.5 rounded-2xl bg-citi-surface/80 border border-citi-border">
+          <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Payment Corridors</span>
+          <span class="font-extrabold text-cyan-300 font-mono mt-0.5 block">NPCI UPI 2.0 / Citi ISO</span>
         </div>
-        <div class="p-3 rounded-xl bg-slate-950/50 border border-slate-800">
-          <span class="text-slate-400 block text-[10px]">Title Transfer (DvP)</span>
-          <span id="metricDvp" class="font-bold text-indigo-300 font-mono">LOCKED ON-CHAIN</span>
+        <div class="p-3.5 rounded-2xl bg-citi-surface/80 border border-citi-border">
+          <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Atomic DvP Ownership</span>
+          <span id="metricDvp" class="font-extrabold text-indigo-300 font-mono mt-0.5 block">LOCKED ON-CHAIN</span>
         </div>
       </div>
 
     </div>
 
-    <!-- Tab Navigation -->
-    <div class="flex border-b border-slate-800 gap-2 overflow-x-auto">
-      <button onclick="setTab('MILESTONES')" id="tabBtnMILESTONES" class="pb-3 px-4 text-xs font-bold flex items-center gap-2 border-b-2 border-cyan-400 text-cyan-300 transition-all">
-        <span>⚡ Milestones & Dual-Rail Settlement</span>
+    <!-- Navigation Tabs -->
+    <div class="flex border-b border-citi-border/80 gap-2 overflow-x-auto">
+      <button onclick="setTab('MILESTONES')" id="tabBtnMILESTONES" class="pb-3.5 px-4 text-xs font-extrabold flex items-center gap-2 border-b-2 border-cyan-400 text-cyan-300 transition-all">
+        <span>⚡ 1. Programmable Milestones (DvP)</span>
       </button>
 
-      <button onclick="setTab('ORACLE')" id="tabBtnORACLE" class="pb-3 px-4 text-xs font-bold flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-white transition-all">
-        <span>📡 Logistics & Customs Oracle</span>
+      <button onclick="setTab('ORACLE')" id="tabBtnORACLE" class="pb-3.5 px-4 text-xs font-bold flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-white transition-all">
+        <span>📡 2. Logistics & Customs Oracle</span>
       </button>
 
-      <button onclick="setTab('RWA')" id="tabBtnRWA" class="pb-3 px-4 text-xs font-bold flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-white transition-all">
-        <span>📦 Tokenized e-BL (RWA NFT)</span>
+      <button onclick="setTab('RWA')" id="tabBtnRWA" class="pb-3.5 px-4 text-xs font-bold flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-white transition-all">
+        <span>📦 3. Tokenized e-BL (RWA NFT)</span>
       </button>
 
-      <button onclick="setTab('COMPLIANCE')" id="tabBtnCOMPLIANCE" class="pb-3 px-4 text-xs font-bold flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-white transition-all">
-        <span>🏛️ Citi Treasury & RBI Compliance</span>
+      <button onclick="setTab('COMPLIANCE')" id="tabBtnCOMPLIANCE" class="pb-3.5 px-4 text-xs font-bold flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-white transition-all">
+        <span>🏛️ 4. Citi Treasury & RBI Compliance</span>
       </button>
     </div>
 
-    <!-- Tab Contents -->
+    <!-- TAB 1: MILESTONES & DUAL RAIL SETTLEMENT -->
     <div id="tabContentMILESTONES" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div class="lg:col-span-2 bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 sm:p-6 shadow-xl space-y-5">
-        <div class="flex justify-between items-center pb-4 border-b border-slate-800">
+      
+      <div class="lg:col-span-2 glass-card rounded-3xl p-6 sm:p-7 space-y-6">
+        <div class="flex justify-between items-center pb-4 border-b border-citi-border">
           <div>
-            <h3 class="text-base font-bold text-white">Programmable Escrow Milestones (DvP Lifecycle)</h3>
-            <p class="text-xs text-slate-400">Funds remain locked in smart escrow until verified by logistics or customs attestations.</p>
+            <h3 class="text-base font-extrabold text-white">Programmable Milestone Settlement Pipeline</h3>
+            <p class="text-xs text-slate-400 mt-0.5">Funds are automatically released upon verified logistics or customs telemetry.</p>
           </div>
-          <span id="milestoneCounter" class="text-xs px-2.5 py-0.5 rounded-full bg-cyan-950 border border-cyan-700/50 text-cyan-300 font-semibold">
+          <span id="milestoneCounter" class="text-xs px-3 py-1 rounded-full bg-citi-blue/50 border border-citi-cyan/50 text-cyan-300 font-bold">
             0 of 4 Released
           </span>
         </div>
 
-        <!-- Progress bar -->
-        <div>
-          <div class="flex justify-between text-xs text-slate-400 font-medium mb-1.5">
+        <!-- Progress Bar -->
+        <div class="space-y-2">
+          <div class="flex justify-between text-xs text-slate-400 font-semibold">
             <span>Escrow Capital Disbursed</span>
-            <span id="progressBarText" class="text-cyan-400 font-bold">0% Complete</span>
+            <span id="progressBarText" class="text-cyan-400 font-mono font-bold">0% Complete</span>
           </div>
-          <div class="h-2.5 w-full bg-slate-800 rounded-full overflow-hidden p-0.5">
-            <div id="progressBarFill" class="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+          <div class="h-3 w-full bg-citi-surface rounded-full overflow-hidden p-0.5 border border-citi-border">
+            <div id="progressBarFill" class="h-full bg-gradient-to-r from-citi-azure via-cyan-400 to-emerald-400 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
           </div>
         </div>
 
-        <!-- Dynamic Milestone Cards -->
-        <div id="milestoneList" class="space-y-3.5">
+        <!-- Dynamic Milestone Cards List -->
+        <div id="milestoneList" class="space-y-4">
           <!-- Populated dynamically -->
         </div>
       </div>
 
-      <!-- Right RWA mini preview -->
+      <!-- Right RWA Mini Preview Card -->
       <div id="rwaMiniCard" class="space-y-4">
         <!-- Populated dynamically -->
       </div>
     </div>
 
-    <div id="tabContentORACLE" class="hidden bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 sm:p-6 shadow-xl space-y-5">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+    <!-- TAB 2: ORACLE SANDBOX -->
+    <div id="tabContentORACLE" class="hidden glass-card rounded-3xl p-6 sm:p-7 space-y-6">
+      <div class="flex items-center justify-between pb-4 border-b border-citi-border">
         <div>
-          <h3 class="text-base font-bold text-white">Logistics & Customs IoT Oracle Terminal</h3>
-          <p class="text-xs text-slate-400">Live automated data feeds linking physical cargo events directly to Drunix Smart Escrow</p>
+          <h3 class="text-base font-extrabold text-white">Logistics & ICEGATE Customs Oracle Simulator</h3>
+          <p class="text-xs text-slate-400 mt-0.5">Test simulated real-world telemetry feeds linking physical containers directly to Drunix Smart Contracts.</p>
         </div>
-        <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-slate-800 text-indigo-300 border border-slate-700">
+        <span class="text-xs font-mono font-bold px-3 py-1 rounded-xl bg-citi-surface border border-citi-cyan text-cyan-300">
           ICEGATE / AIS Active
         </span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="p-4 rounded-xl bg-slate-800/30 border border-slate-700/60 space-y-2">
-          <div class="flex justify-between items-start">
+        <div class="p-4 rounded-2xl bg-citi-surface/90 border border-citi-border space-y-3 glass-card-interactive transition-all">
+          <div class="flex justify-between items-start gap-2">
             <div>
-              <h4 class="text-xs font-bold text-white">1. Factory Acceptance & Order Kickoff</h4>
-              <p class="text-[11px] text-slate-400">PO verification & production inspection signoff.</p>
+              <h4 class="text-xs font-extrabold text-white">1. Factory Acceptance & Order Kickoff</h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">PO validation & factory production inspection certificate.</p>
             </div>
-            <button onclick="triggerOracle(0, 'FACTORY_ACCEPTANCE_PASS')" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold">
-              Send Feed
+            <button onclick="triggerOracle(0)" class="px-3.5 py-1.5 rounded-xl bg-citi-azure hover:bg-citi-blue text-white text-xs font-bold shadow-md shadow-citi-azure/20">
+              Send Feed 📡
             </button>
           </div>
-          <div class="p-2 rounded bg-slate-950 text-[10px] font-mono text-cyan-300">
+          <div class="p-2.5 rounded-xl bg-citi-dark border border-citi-border text-[10px] font-mono text-cyan-300">
             {"inspector": "TÜV SÜD Germany", "cert": "TUV-DE-99482", "pass": true}
           </div>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-800/30 border border-slate-700/60 space-y-2">
-          <div class="flex justify-between items-start">
+        <div class="p-4 rounded-2xl bg-citi-surface/90 border border-citi-border space-y-3 glass-card-interactive transition-all">
+          <div class="flex justify-between items-start gap-2">
             <div>
-              <h4 class="text-xs font-bold text-white">2. Origin Port Customs Export Clearance</h4>
-              <p class="text-[11px] text-slate-400">Attest German Export Customs & e-BL issued by Hapag-Lloyd.</p>
+              <h4 class="text-xs font-extrabold text-white">2. Origin Port Customs Export Clearance</h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">Attest German Export Customs & e-BL issued by Hapag-Lloyd.</p>
             </div>
-            <button onclick="triggerOracle(1, 'CUSTOMS_EXPORT_PASS')" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold">
-              Send Feed
+            <button onclick="triggerOracle(1)" class="px-3.5 py-1.5 rounded-xl bg-citi-azure hover:bg-citi-blue text-white text-xs font-bold shadow-md shadow-citi-azure/20">
+              Send Feed 📡
             </button>
           </div>
-          <div class="p-2 rounded bg-slate-950 text-[10px] font-mono text-cyan-300">
-            {"authority": "Hamburg Zollamt", "exportDeclaration": "ATLAS-DE-44910", "cleared": true}
+          <div class="p-2.5 rounded-xl bg-citi-dark border border-citi-border text-[10px] font-mono text-cyan-300">
+            {"authority": "Hamburg Zollamt", "declaration": "ATLAS-DE-44910", "cleared": true}
           </div>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-800/30 border border-slate-700/60 space-y-2">
-          <div class="flex justify-between items-start">
+        <div class="p-4 rounded-2xl bg-citi-surface/90 border border-citi-border space-y-3 glass-card-interactive transition-all">
+          <div class="flex justify-between items-start gap-2">
             <div>
-              <h4 class="text-xs font-bold text-white">3. Nhava Sheva (JNPT) Port Arrival</h4>
-              <p class="text-[11px] text-slate-400">AIS Vessel Radar geofence cross & ICEGATE Import Bill of Entry.</p>
+              <h4 class="text-xs font-extrabold text-white">3. Nhava Sheva (JNPT) Port Arrival</h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">AIS Radar geofence cross & ICEGATE Import Bill of Entry.</p>
             </div>
-            <button onclick="triggerOracle(2, 'AIS_PORT_ARRIVAL_PASS')" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold">
-              Send Feed
+            <button onclick="triggerOracle(2)" class="px-3.5 py-1.5 rounded-xl bg-citi-azure hover:bg-citi-blue text-white text-xs font-bold shadow-md shadow-citi-azure/20">
+              Send Feed 📡
             </button>
           </div>
-          <div class="p-2 rounded bg-slate-950 text-[10px] font-mono text-cyan-300">
+          <div class="p-2.5 rounded-xl bg-citi-dark border border-citi-border text-[10px] font-mono text-cyan-300">
             {"portCode": "INNSA", "coords": "18.9496° N, 72.9511° E", "icegateBoe": "BOE-IN-2026-88129"}
           </div>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-800/30 border border-slate-700/60 space-y-2">
-          <div class="flex justify-between items-start">
+        <div class="p-4 rounded-2xl bg-citi-surface/90 border border-citi-border space-y-3 glass-card-interactive transition-all">
+          <div class="flex justify-between items-start gap-2">
             <div>
-              <h4 class="text-xs font-bold text-white">4. Site Delivery & IoT Telemetry Signoff</h4>
-              <p class="text-[11px] text-slate-400">GPS destination reached + temperature & vibration within threshold.</p>
+              <h4 class="text-xs font-extrabold text-white">4. Site Delivery & IoT Telemetry Signoff</h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">GPS destination reached + temperature & vibration within threshold.</p>
             </div>
-            <button onclick="triggerOracle(3, 'IOT_DELIVERY_PASS')" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold">
-              Send Feed
+            <button onclick="triggerOracle(3)" class="px-3.5 py-1.5 rounded-xl bg-citi-azure hover:bg-citi-blue text-white text-xs font-bold shadow-md shadow-citi-azure/20">
+              Send Feed 📡
             </button>
           </div>
-          <div class="p-2 rounded bg-slate-950 text-[10px] font-mono text-cyan-300">
-            {"destination": "Bharat Solar Gujarat", "tempAvg": "21.4°C", "inspection": "ACCEPTED"}
+          <div class="p-2.5 rounded-xl bg-citi-dark border border-citi-border text-[10px] font-mono text-cyan-300">
+            {"destination": "Bharat Solar Plant, Gujarat", "tempAvg": "21.4°C", "inspection": "ACCEPTED"}
           </div>
         </div>
       </div>
     </div>
 
+    <!-- TAB 3: RWA NFT VIEW -->
     <div id="tabContentRWA" class="hidden max-w-2xl mx-auto">
       <div id="rwaFullCard"></div>
     </div>
 
-    <div id="tabContentCOMPLIANCE" class="hidden bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 sm:p-6 shadow-xl space-y-4">
-      <div class="flex justify-between items-center pb-4 border-b border-slate-800">
+    <!-- TAB 4: COMPLIANCE & ISO 20022 -->
+    <div id="tabContentCOMPLIANCE" class="hidden glass-card rounded-3xl p-6 sm:p-7 space-y-5">
+      <div class="flex justify-between items-center pb-4 border-b border-citi-border">
         <div>
-          <h3 class="text-base font-bold text-white">Citi Treasury & Regulatory Compliance Desk</h3>
-          <p class="text-xs text-slate-400">Harmonized reporting for RBI EDPMS/IDPMS, FEMA, and ISO 20022 Cross-Border Rails</p>
+          <h3 class="text-base font-extrabold text-white">Citi Global Treasury & RBI Compliance Desk</h3>
+          <p class="text-xs text-slate-400 mt-0.5">Harmonized reporting for RBI EDPMS/IDPMS, FEMA Form A2, and ISO 20022 Cross-Border Rails</p>
         </div>
-        <span class="px-2.5 py-1 rounded bg-emerald-950 border border-emerald-700/60 text-emerald-300 font-mono text-xs">
+        <span class="px-3 py-1 rounded-xl bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 font-mono text-xs font-bold">
           RBI COMPLIANT 100%
         </span>
       </div>
 
-      <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-        <h4 class="text-xs font-bold text-white">ISO 20022 pacs.008 XML Message Sample:</h4>
-        <pre id="isoXmlViewer" class="p-3 bg-slate-900 rounded-lg text-[10px] font-mono text-cyan-300 overflow-x-auto leading-relaxed"></pre>
+      <div class="p-4 rounded-2xl bg-citi-surface border border-citi-border space-y-2.5">
+        <div class="flex justify-between items-center">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider">ISO 20022 pacs.008 XML Message Payload:</h4>
+          <span class="text-[10px] font-mono text-cyan-400">Standard: pacs.008.001.08</span>
+        </div>
+        <pre id="isoXmlViewer" class="p-3.5 bg-citi-dark rounded-xl text-[10.5px] font-mono text-cyan-300 overflow-x-auto leading-relaxed border border-citi-border"></pre>
       </div>
 
-      <div>
-        <h4 class="text-xs font-bold text-white mb-2">Immutable Cryptographic Audit Trail:</h4>
-        <div id="auditLogList" class="space-y-2 max-h-64 overflow-y-auto"></div>
+      <div class="space-y-2.5">
+        <h4 class="text-xs font-bold text-white uppercase tracking-wider">Immutable Cryptographic Audit Trail:</h4>
+        <div id="auditLogList" class="space-y-2 max-h-64 overflow-y-auto pr-1"></div>
       </div>
     </div>
 
   </main>
 
-  <!-- Payment Modal -->
-  <div id="paymentModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-    <div class="relative w-full max-w-xl bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl p-6 space-y-5">
-      <div class="flex justify-between items-center pb-3 border-b border-slate-800">
-        <h3 class="text-base font-bold text-white">Fund Programmable Escrow Vault</h3>
-        <button onclick="closePaymentModal()" class="text-slate-400 hover:text-white">✕</button>
+  <!-- Payment Modal (NPCI UPI Dynamic QR & Citi Vault) -->
+  <div id="paymentModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+    <div class="relative w-full max-w-xl glass-card border border-citi-cyan/80 rounded-3xl shadow-2xl p-6 sm:p-7 space-y-5">
+      
+      <div class="flex justify-between items-center pb-3 border-b border-citi-border">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-cyan-950 border border-citi-cyan flex items-center justify-center text-cyan-400 font-bold">
+            🔒
+          </div>
+          <h3 class="text-base font-extrabold text-white">Fund Programmable Escrow Vault</h3>
+        </div>
+        <button onclick="closePaymentModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
       </div>
 
       <div class="space-y-4">
-        <div class="p-3 rounded-xl bg-blue-950/40 border border-blue-800/40 text-xs">
-          <span class="text-slate-400 block">Total Escrow Capital to Lock:</span>
-          <span id="modalAmountUsd" class="text-lg font-bold text-white font-mono">$50,000.00 USD</span>
-          <span id="modalAmountInr" class="text-xs font-bold text-cyan-400 font-mono block">₹42,12,500 (Spot Locked at 84.25)</span>
+        <!-- Capital Summary -->
+        <div class="p-4 rounded-2xl bg-citi-dark/90 border border-citi-border flex justify-between items-center">
+          <div>
+            <span class="text-[10px] font-bold text-slate-400 uppercase">Capital to Deposit & Lock</span>
+            <span id="modalAmountUsd" class="text-lg font-extrabold text-white font-mono block">$50,000.00 USD</span>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] font-bold text-slate-400 uppercase">INR Equivalent (84.25 Spot)</span>
+            <span id="modalAmountInr" class="text-sm font-extrabold text-npci-saffron font-mono block">₹42,12,500</span>
+          </div>
         </div>
 
-        <!-- UPI Quick Apps Simulator -->
-        <div>
-          <span class="text-xs font-bold text-slate-300 block mb-2">1-Click NPCI Real-Time Payment Simulation:</span>
+        <!-- 1-Click NPCI Rails -->
+        <div class="space-y-2">
+          <span class="text-xs font-bold text-slate-300 block">1-Click NPCI Real-Time UPI Execution:</span>
           <div class="grid grid-cols-2 gap-2.5">
-            <button onclick="simulatePay('GooglePay')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left text-xs font-medium text-white">
+            <button onclick="simulatePay('GooglePay')" class="p-3 rounded-xl bg-citi-surface hover:bg-citi-card border border-citi-border text-left text-xs font-medium text-white transition-all">
               ⚡ Pay via <strong>Google Pay</strong>
             </button>
-            <button onclick="simulatePay('PhonePe')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left text-xs font-medium text-white">
+            <button onclick="simulatePay('PhonePe')" class="p-3 rounded-xl bg-citi-surface hover:bg-citi-card border border-citi-border text-left text-xs font-medium text-white transition-all">
               🟣 Pay via <strong>PhonePe</strong>
             </button>
-            <button onclick="simulatePay('BHIM')" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-left text-xs font-medium text-white">
+            <button onclick="simulatePay('BHIM')" class="p-3 rounded-xl bg-citi-surface hover:bg-citi-card border border-citi-border text-left text-xs font-medium text-white transition-all">
               🇮🇳 Pay via <strong>BHIM UPI</strong>
             </button>
-            <button onclick="simulatePay('CitiMobile')" class="p-2.5 rounded-xl bg-blue-950/80 hover:bg-blue-900 border border-blue-800 text-left text-xs font-medium text-blue-200">
+            <button onclick="simulatePay('CitiMobile')" class="p-3 rounded-xl bg-citi-blue/60 hover:bg-citi-blue border border-citi-azure text-left text-xs font-medium text-cyan-200 transition-all">
               🏦 Pay via <strong>Citi Mobile</strong>
             </button>
           </div>
         </div>
 
-        <button onclick="simulateCitiVaultLock()" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs shadow-lg shadow-blue-500/20">
-          🏛️ Lock in Citi Corporate Escrow Vault (ISO 20022 camt.053)
+        <!-- Citi Corporate Vault Wire -->
+        <button onclick="simulateCitiVaultLock()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-citi-blue via-citi-azure to-cyan-500 hover:from-citi-navy hover:to-cyan-400 text-white font-extrabold text-xs shadow-xl shadow-citi-azure/20 flex items-center justify-center gap-2 transition-all">
+          <span>🏛️ Lock in Citi Corporate Escrow Vault (ISO 20022 camt.053)</span>
         </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Video Walkthrough Modal -->
+  <div id="videoModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md">
+    <div class="relative w-full max-w-3xl glass-card border border-citi-cyan rounded-3xl shadow-2xl p-6 space-y-4">
+      <div class="flex justify-between items-center pb-3 border-b border-citi-border">
+        <h3 class="text-base font-extrabold text-white flex items-center gap-2">
+          <span>🎬 CitiFlow Escrow System Architecture & Prompt Studio</span>
+        </h3>
+        <button onclick="closeVideoModal()" class="text-slate-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-300">
+        <p>
+          Generate your 4K cinematic explainer animations directly with <strong>Gemini Video Generator (Veo)</strong> using the optimized prompts below:
+        </p>
+
+        <div class="p-3.5 rounded-2xl bg-citi-dark border border-citi-border space-y-1.5 font-mono text-[11px]">
+          <span class="text-cyan-400 font-bold block">PROMPT 1: End-to-End Trade Corridor (4K Cinematic)</span>
+          <p class="text-slate-300">
+            "Cinematic 3D animation of an automated cross-border trade route between Port of Hamburg and Mumbai JNPT. A high-tech container ship with glowing IoT sensors crosses a digital geofence. Holographic smart contract locks in a Drunix blockchain vault, releasing glowing golden UPI currency streams to an Indian bank and blue ISO 20022 wires to Citibank Treasury. Photorealistic lighting, 8k render, hyper-detailed fintech UI overlays."
+          </p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-citi-dark border border-citi-border space-y-1.5 font-mono text-[11px]">
+          <span class="text-npci-saffron font-bold block">PROMPT 2: NPCI e-RUPI & Instant Settlement</span>
+          <p class="text-slate-300">
+            "Futuristic smartphone screen displaying a CitiFlow Trade Escrow dynamic QR code. A biometric scan verifies the Customs Bill of Entry on ICEGATE, instantly generating a green e-RUPI purpose voucher with cryptographic hash. Smooth holographic animations, clean minimalist fintech interface."
+          </p>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Create Deal Modal -->
-  <div id="createDealModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-    <div class="relative w-full max-w-xl bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center pb-3 border-b border-slate-800">
-        <h3 class="text-base font-bold text-white">Deploy New Smart Escrow Trade Deal</h3>
+  <div id="createDealModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+    <div class="relative w-full max-w-xl glass-card border border-citi-border rounded-3xl shadow-2xl p-6 sm:p-7 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center pb-3 border-b border-citi-border">
+        <h3 class="text-base font-extrabold text-white">Deploy New Smart Escrow Trade Deal</h3>
         <button onclick="closeCreateModal()" class="text-slate-400 hover:text-white">✕</button>
       </div>
 
-      <form id="newDealForm" onsubmit="createDeal(event)" class="space-y-3 text-xs">
+      <form id="newDealForm" onsubmit="createDeal(event)" class="space-y-3.5 text-xs">
         <div>
           <label class="text-slate-400 block mb-1">Contract / PO Reference</label>
-          <input type="text" id="newPoRef" value="PO-BHARAT-2026-X81" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono" required />
+          <input type="text" id="newPoRef" value="PO-BHARAT-2026-X81" class="w-full px-3.5 py-2.5 rounded-xl bg-citi-surface border border-citi-border text-white font-mono" required />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="text-slate-400 block mb-1">Total Value (USD)</label>
-            <input type="number" id="newAmountUsd" value="75000" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono font-bold" required />
+            <input type="number" id="newAmountUsd" value="75000" class="w-full px-3.5 py-2.5 rounded-xl bg-citi-surface border border-citi-border text-white font-mono font-bold" required />
           </div>
           <div>
             <label class="text-slate-400 block mb-1">Buyer (India)</label>
-            <input type="text" id="newBuyerName" value="Tata Power Renewables Ltd" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white" required />
+            <input type="text" id="newBuyerName" value="Tata Power Renewables Ltd" class="w-full px-3.5 py-2.5 rounded-xl bg-citi-surface border border-citi-border text-white" required />
           </div>
         </div>
 
         <div>
           <label class="text-slate-400 block mb-1">Supplier / Exporter Name</label>
-          <input type="text" id="newSellerName" value="Siemens Energy AG" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white" required />
+          <input type="text" id="newSellerName" value="Siemens Energy AG" class="w-full px-3.5 py-2.5 rounded-xl bg-citi-surface border border-citi-border text-white" required />
         </div>
 
         <div>
           <label class="text-slate-400 block mb-1">Cargo Description</label>
-          <input type="text" id="newCargoDesc" value="Grid Transformers & Power Converters" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white" required />
+          <input type="text" id="newCargoDesc" value="Grid Transformers & Power Converters" class="w-full px-3.5 py-2.5 rounded-xl bg-citi-surface border border-citi-border text-white" required />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="text-slate-400 block mb-1">Origin Port</label>
-            <input type="text" id="newPortLoading" value="Port of Rotterdam" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white" required />
+            <input type="text" id="newPortLoading" value="Port of Rotterdam (NLRTM)" class="w-full px-3.5 py-2.5 rounded-xl bg-citi-surface border border-citi-border text-white" required />
           </div>
           <div>
             <label class="text-slate-400 block mb-1">Destination Port</label>
-            <input type="text" id="newPortDischarge" value="Mundra Port (INMUN)" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white" required />
+            <input type="text" id="newPortDischarge" value="Mundra Port (INMUN)" class="w-full px-3.5 py-2.5 rounded-xl bg-citi-surface border border-citi-border text-white" required />
           </div>
         </div>
 
-        <div class="pt-3 border-t border-slate-800 flex justify-end gap-2">
-          <button type="button" onclick="closeCreateModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300">Cancel</button>
-          <button type="submit" class="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold">Deploy Smart Contract</button>
+        <div class="pt-3 border-t border-citi-border flex justify-end gap-2">
+          <button type="button" onclick="closeCreateModal()" class="px-4 py-2 rounded-xl bg-citi-surface text-slate-300 font-bold">Cancel</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-citi-azure to-cyan-400 text-white font-extrabold shadow-lg shadow-citi-azure/20">Deploy Smart Contract</button>
         </div>
       </form>
     </div>
   </div>
 
-  <footer class="border-t border-slate-900 bg-slate-950 py-5 text-center text-xs text-slate-500">
-    CitiFlow Escrow • Drunix Hackathon in collaboration with Citi & India Blockchain Forum
+  <footer class="border-t border-citi-border/60 bg-[#050B14] py-6 text-center text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>CitiFlow Escrow • Drunix Hackathon in collaboration with Citi & India Blockchain Forum</p>
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] px-2 py-0.5 rounded bg-citi-blue/40 text-cyan-300 font-mono">ISO 20022 Enabled</span>
+        <span class="text-[10px] px-2 py-0.5 rounded bg-npci-emerald/40 text-emerald-300 font-mono">NPCI 2.0 Compliant</span>
+      </div>
+    </div>
   </footer>
 
-  <!-- App Logic -->
+  <!-- Application Logic -->
   <script>
     let allDeals = [];
     let currentDeal = null;
@@ -463,10 +624,10 @@
       document.getElementById('originPortText').textContent = d.rwaDetails?.portOfLoading || 'Origin Port';
 
       document.getElementById('totalUsdText').textContent = `$${d.totalAmountUSD.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-      document.getElementById('totalInrText').textContent = `₹${d.totalAmountINR.toLocaleString('en-IN')} (Spot Locked)`;
+      document.getElementById('totalInrText').textContent = `₹${d.totalAmountINR.toLocaleString('en-IN')} (Spot Hedged)`;
 
       document.getElementById('modalAmountUsd').textContent = `$${d.totalAmountUSD.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-      document.getElementById('modalAmountInr').textContent = `₹${d.totalAmountINR.toLocaleString('en-IN')} (Spot Locked at 84.25)`;
+      document.getElementById('modalAmountInr').textContent = `₹${d.totalAmountINR.toLocaleString('en-IN')}`;
 
       document.getElementById('metricStatus').textContent = d.status;
       const releasedCount = d.milestones.filter(m => m.isReleased).length;
@@ -480,55 +641,55 @@
       document.getElementById('progressBarText').textContent = `${releasedPct}% Complete`;
       document.getElementById('progressBarFill').style.width = `${releasedPct}%`;
 
-      // Hide lock button if funded
+      // Lock Button container
       const lockBtnContainer = document.getElementById('lockFundsContainer');
       if (d.status === 'CREATED') {
-        lockBtnContainer.innerHTML = `<button onclick="openPaymentModal()" class="px-6 py-4 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-cyan-400 hover:from-orange-400 hover:to-cyan-300 text-slate-950 font-extrabold text-sm shadow-xl shadow-amber-500/20 flex items-center gap-2 transition-all"><span>🔒 Lock Funds via UPI / Citi Escrow</span></button>`;
+        lockBtnContainer.innerHTML = `<button onclick="openPaymentModal()" class="px-6 py-4 rounded-2xl bg-gradient-to-r from-npci-saffron via-amber-500 to-cyan-400 hover:from-orange-500 hover:to-cyan-300 text-slate-950 font-extrabold text-sm shadow-xl shadow-npci-saffron/20 flex items-center gap-2 transition-all"><span>🔒 Lock Funds via UPI / Citi Escrow</span></button>`;
       } else {
-        lockBtnContainer.innerHTML = `<div class="px-4 py-3 rounded-2xl bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 font-bold text-xs flex items-center gap-2"><span>🛡️ Escrow Vault Active & Funded</span></div>`;
+        lockBtnContainer.innerHTML = `<div class="px-5 py-3.5 rounded-2xl bg-emerald-950/80 border border-emerald-700/60 text-emerald-300 font-extrabold text-xs flex items-center gap-2 shadow-lg shadow-emerald-900/20"><span>🛡️ Institutional Escrow Vault Active</span></div>`;
       }
 
       // Render Milestones
       const isFunded = d.status !== 'CREATED';
       const mHtml = d.milestones.map((m, idx) => {
         const isPrevDone = idx === 0 || d.milestones[idx - 1].isReleased;
-        let badge = `<span class="w-6 h-6 rounded-full bg-slate-800 flex items-center justify-center text-[11px] font-bold text-slate-400">${idx + 1}</span>`;
-        if (m.isReleased) badge = `<span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">✓</span>`;
-        else if (m.isCompleted) badge = `<span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs animate-pulse">🛡️</span>`;
+        let badge = `<span class="w-7 h-7 rounded-xl bg-citi-surface border border-citi-border flex items-center justify-center text-xs font-bold text-slate-400">${idx + 1}</span>`;
+        if (m.isReleased) badge = `<span class="w-7 h-7 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-xs font-bold">✓</span>`;
+        else if (m.isCompleted) badge = `<span class="w-7 h-7 rounded-xl bg-citi-cyan/20 border border-citi-cyan/50 text-cyan-400 flex items-center justify-center text-xs font-bold animate-pulse">🛡️</span>`;
 
         let actionBtn = '';
         if (!isFunded) {
-          actionBtn = `<span class="text-xs text-amber-400">Lock funds first</span>`;
+          actionBtn = `<span class="text-xs text-amber-400 font-semibold">Lock funds first</span>`;
         } else if (m.isReleased) {
-          actionBtn = `<span class="px-3 py-1 rounded-lg bg-emerald-950/80 border border-emerald-700 text-emerald-300 text-xs font-bold">Disbursed ✓</span>`;
+          actionBtn = `<span class="px-3.5 py-1.5 rounded-xl bg-emerald-950/90 border border-emerald-700 text-emerald-300 text-xs font-bold">Disbursed ✓</span>`;
         } else if (m.isCompleted) {
           actionBtn = `
             <div class="flex items-center gap-2">
-              <button onclick="issueErupi(${idx})" class="px-2.5 py-1 rounded-lg bg-orange-950 border border-orange-700 text-orange-200 text-xs font-semibold">e-RUPI</button>
-              <button onclick="releaseMilestone(${idx})" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-xs font-bold shadow">Release Wire (pacs.008)</button>
+              <button onclick="issueErupi(${idx})" class="px-3 py-1.5 rounded-xl bg-npci-saffron/20 hover:bg-npci-saffron/30 border border-npci-saffron text-orange-200 text-xs font-bold">e-RUPI</button>
+              <button onclick="releaseMilestone(${idx})" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-citi-azure to-cyan-500 text-white text-xs font-extrabold shadow-md shadow-citi-azure/20">Release Wire (pacs.008)</button>
             </div>
           `;
         } else if (isPrevDone) {
-          actionBtn = `<button onclick="verifyMilestone(${idx})" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold">Attest & Verify</button>`;
+          actionBtn = `<button onclick="verifyMilestone(${idx})" class="px-4 py-2 rounded-xl bg-citi-azure hover:bg-citi-blue text-white text-xs font-extrabold shadow-md shadow-citi-azure/20">Attest & Verify</button>`;
         } else {
           actionBtn = `<span class="text-xs text-slate-500">Awaiting prior step</span>`;
         }
 
         return `
-          <div class="p-4 rounded-xl border ${m.isReleased ? 'bg-emerald-950/20 border-emerald-800/40' : m.isCompleted ? 'bg-blue-950/20 border-blue-800/50' : isFunded && isPrevDone ? 'bg-slate-800/40 border-slate-700' : 'bg-slate-900/40 border-slate-800 opacity-60'} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div class="flex items-start gap-3">
+          <div class="p-4 sm:p-5 rounded-2xl border ${m.isReleased ? 'bg-emerald-950/20 border-emerald-800/40' : m.isCompleted ? 'bg-citi-blue/20 border-citi-azure/50' : isFunded && isPrevDone ? 'bg-citi-surface/70 border-citi-border' : 'bg-citi-surface/30 border-citi-border/60 opacity-60'} flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all">
+            <div class="flex items-start gap-3.5">
               ${badge}
               <div>
                 <div class="flex items-center gap-2 flex-wrap">
-                  <h4 class="text-xs font-bold text-white">${m.description}</h4>
-                  <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono">${m.payoutPercentage}% Tranche</span>
+                  <h4 class="text-xs font-extrabold text-white">${m.description}</h4>
+                  <span class="text-[10px] px-2 py-0.5 rounded-md bg-citi-dark text-slate-300 font-mono font-bold">${m.payoutPercentage}% Tranche</span>
                 </div>
-                <div class="flex items-center gap-2 mt-1 text-xs text-slate-400">
-                  <span class="text-cyan-300 font-bold">₹${m.payoutAmountINR.toLocaleString('en-IN')}</span>
-                  <span>|</span>
-                  <span class="text-slate-300">$${m.payoutAmountUSD.toLocaleString()} USD</span>
+                <div class="flex items-center gap-2.5 mt-1.5 text-xs text-slate-400">
+                  <span class="text-npci-saffron font-bold">₹${m.payoutAmountINR.toLocaleString('en-IN')}</span>
+                  <span class="text-slate-600">|</span>
+                  <span class="text-cyan-300 font-semibold">$${m.payoutAmountUSD.toLocaleString()} USD</span>
                 </div>
-                ${m.verificationProof ? `<div class="mt-1 text-[10px] font-mono text-emerald-400">Oracle: ${m.verificationProof}</div>` : ''}
+                ${m.verificationProof ? `<div class="mt-1.5 text-[10px] font-mono text-emerald-400 flex items-center gap-1"><span>🛡️ Oracle Proof:</span> <strong>${m.verificationProof}</strong></div>` : ''}
               </div>
             </div>
             <div>${actionBtn}</div>
@@ -537,10 +698,7 @@
       }).join('');
       document.getElementById('milestoneList').innerHTML = mHtml;
 
-      // Render RWA cards
       renderRwaCard();
-
-      // Render Audit logs & ISO 20022
       renderCompliance();
     }
 
@@ -550,31 +708,31 @@
       const isDone = currentDeal.status === 'COMPLETED';
 
       const rwaHtml = `
-        <div class="bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
-          <div class="flex justify-between items-center pb-3 border-b border-slate-800">
+        <div class="glass-card rounded-3xl p-5 sm:p-6 shadow-xl space-y-4 border border-citi-border">
+          <div class="flex justify-between items-center pb-3 border-b border-citi-border">
             <div>
-              <div class="flex items-center gap-1.5">
-                <h3 class="text-xs font-bold text-white">Tokenized e-Bill of Lading</h3>
-                <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 font-mono">ERC-721 #${currentDeal.rwaTokenId}</span>
+              <div class="flex items-center gap-2">
+                <h3 class="text-xs font-extrabold text-white">Tokenized e-Bill of Lading</h3>
+                <span class="text-[10px] px-2 py-0.5 rounded-md bg-citi-blue/60 text-cyan-300 font-mono font-bold">ERC-721 #${currentDeal.rwaTokenId}</span>
               </div>
-              <p class="text-[11px] text-slate-400 font-mono">${r.blNumber}</p>
+              <p class="text-[11px] text-slate-400 font-mono mt-0.5">${r.blNumber}</p>
             </div>
             <span class="text-[10px] font-bold ${isDone ? 'text-emerald-400' : 'text-amber-400'}">
               ${isDone ? 'Title Transferred to Buyer ✓' : '🔒 Locked in Escrow'}
             </span>
           </div>
 
-          <div class="space-y-2 text-xs">
-            <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
-              <span class="text-[10px] text-slate-500 block">Cargo Description</span>
-              <span class="font-semibold text-slate-200">${r.cargoDescription}</span>
+          <div class="space-y-2.5 text-xs">
+            <div class="p-3 rounded-xl bg-citi-dark border border-citi-border">
+              <span class="text-[10px] text-slate-400 font-bold uppercase block">Cargo Consignment</span>
+              <span class="font-semibold text-slate-100">${r.cargoDescription}</span>
             </div>
-            <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
-              <span class="text-[10px] text-slate-500 block">Carrier & Container</span>
+            <div class="p-3 rounded-xl bg-citi-dark border border-citi-border">
+              <span class="text-[10px] text-slate-400 font-bold uppercase block">Carrier & Container Serial</span>
               <span class="font-semibold text-cyan-300 font-mono">${r.carrierName} (${r.containerNumber})</span>
             </div>
-            <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
-              <span class="text-[10px] text-slate-500 block">Current Legal Title Holder</span>
+            <div class="p-3 rounded-xl bg-citi-dark border border-citi-border">
+              <span class="text-[10px] text-slate-400 font-bold uppercase block">Current Legal Title Holder (DvP)</span>
               <span class="font-bold text-white font-mono">${r.titleHolder}</span>
             </div>
           </div>
@@ -589,9 +747,9 @@
       if (!currentDeal) return;
       const logs = currentDeal.auditLogs || [];
       document.getElementById('auditLogList').innerHTML = logs.map(l => `
-        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center text-xs">
+        <div class="p-3.5 rounded-2xl bg-citi-surface border border-citi-border flex justify-between items-center text-xs">
           <div>
-            <span class="font-bold text-white font-mono uppercase">${l.action}</span>
+            <span class="font-extrabold text-white font-mono uppercase">${l.action}</span>
             <p class="text-slate-300 text-[11px] mt-0.5">${l.details}</p>
           </div>
           <span class="text-[10px] text-slate-500 font-mono">${new Date(l.timestamp).toLocaleTimeString()}</span>
@@ -605,10 +763,15 @@
     <GrpHdr>
       <MsgId>CITI-PACS008-${currentDeal.dealReference}-FINAL</MsgId>
       <CreDtTm>${new Date().toISOString()}</CreDtTm>
+      <NbOfTxs>1</NbOfTxs>
+      <SttlmInf><SttlmMtd>CLRG</SttlmMtd></SttlmInf>
     </GrpHdr>
     <CdtTrfTxInf>
+      <PmtId><EndToEndId>CITIFLOW-ESCROW-${currentDeal.dealReference}</EndToEndId></PmtId>
       <IntrBkSttlmAmt Ccy="USD">${currentDeal.totalAmountUSD.toFixed(2)}</IntrBkSttlmAmt>
       <Dbtr><Nm>${currentDeal.buyerName}</Nm></Dbtr>
+      <DbtrAgt><FinInstnId><BICFI>CITIINBX</BICFI></FinInstnId></DbtrAgt>
+      <CdtrAgt><FinInstnId><BICFI>CITIDEFF</BICFI></FinInstnId></CdtrAgt>
       <Cdtr><Nm>${currentDeal.sellerName}</Nm></Cdtr>
       <RmtInf><Ustrd>CitiFlow Smart Escrow DvP Settlement Complete</Ustrd></RmtInf>
     </CdtTrfTxInf>
@@ -620,16 +783,18 @@
     function setTab(tab) {
       ['MILESTONES', 'ORACLE', 'RWA', 'COMPLIANCE'].forEach(t => {
         document.getElementById(`tabContent${t}`).classList.add('hidden');
-        document.getElementById(`tabBtn${t}`).className = 'pb-3 px-4 text-xs font-bold flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-white transition-all';
+        document.getElementById(`tabBtn${t}`).className = 'pb-3.5 px-4 text-xs font-bold flex items-center gap-2 border-b-2 border-transparent text-slate-400 hover:text-white transition-all';
       });
       document.getElementById(`tabContent${tab}`).classList.remove('hidden');
-      document.getElementById(`tabBtn${tab}`).className = 'pb-3 px-4 text-xs font-bold flex items-center gap-2 border-b-2 border-cyan-400 text-cyan-300 transition-all';
+      document.getElementById(`tabBtn${tab}`).className = 'pb-3.5 px-4 text-xs font-extrabold flex items-center gap-2 border-b-2 border-cyan-400 text-cyan-300 transition-all';
     }
 
     function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); }
     function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); }
     function openCreateModal() { document.getElementById('createDealModal').classList.remove('hidden'); }
     function closeCreateModal() { document.getElementById('createDealModal').classList.add('hidden'); }
+    function openVideoModal() { document.getElementById('videoModal').classList.remove('hidden'); }
+    function closeVideoModal() { document.getElementById('videoModal').classList.add('hidden'); }
 
     async function simulatePay(app) {
       const res = await fetch('/api/npci/upi/verify-payment', {
@@ -640,7 +805,7 @@
       const data = await res.json();
       if (data.success) {
         closePaymentModal();
-        showToast(`Funds locked via ${app} UPI Rail!`);
+        showToast(`Funds locked via ${app} NPCI UPI Rail!`);
         fetchDeals();
       }
     }
@@ -654,7 +819,7 @@
       const data = await res.json();
       if (data.success) {
         closePaymentModal();
-        showToast(`Locked funds in Citi Escrow Vault (${data.isoMessageId})`);
+        showToast(`Locked funds in Citi Corporate Escrow Vault (${data.isoMessageId})`);
         fetchDeals();
       }
     }
@@ -682,7 +847,7 @@
       if (data.success) {
         showToast(`Disbursed $${data.payoutAmountUSD.toLocaleString()} via Citi ISO 20022 wire!`);
         if (data.deal.status === 'COMPLETED') {
-          confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+          confetti({ particleCount: 160, spread: 90, origin: { y: 0.6 } });
         }
         fetchDeals();
       }
@@ -700,7 +865,7 @@
       }
     }
 
-    async function triggerOracle(index, proofType) {
+    async function triggerOracle(index) {
       await verifyMilestone(index);
     }
 
@@ -723,7 +888,7 @@
       });
       const data = await res.json();
       closeCreateModal();
-      showToast(`Created trade deal #${data.dealReference}`);
+      showToast(`Deployed trade agreement #${data.dealReference}`);
       fetchDeals();
     }
 
