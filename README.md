@@ -15,6 +15,8 @@
 
 **CitiFlow Escrow** is an institutional-grade, programmable trade finance and escrow settlement platform. It bridges **Citibank’s Global Treasury & FX Infrastructure** with **NPCI’s Sovereign Real-Time Rails (UPI 2.0 & e-RUPI)** on the **Drunix Layer-1 Blockchain**, solving the \$2.5 Trillion global trade trust and working capital liquidity gap.
 
+![CitiFlow Escrow Web Cockpit](public/images/citiflow_cockpit_preview.png)
+
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────┐
 │                             CITIFLOW ESCROW CORE                                 │
