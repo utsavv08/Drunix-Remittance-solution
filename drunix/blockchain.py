@@ -82,6 +82,20 @@ class DrunixBlockchainSim:
             return True
         return False
 
+    def refund_escrow_contract(self, contract_id):
+        if contract_id in self._ledger:
+            self._ledger[contract_id].status = EscrowStatus.REFUNDED
+            self._ledger[contract_id].updated_at = datetime.utcnow()
+            logger.info(f"Escrow refunded: {contract_id}")
+            return True
+        return False
+
+    def get_contract_status(self, contract_id):
+        contract = self._ledger.get(contract_id)
+        if contract:
+            return contract.to_dict()
+        return None
+
     def disburse_funds(self, contract_id: str) -> bool:
         """
         Simulates releasing funds from escrow to the recipient.

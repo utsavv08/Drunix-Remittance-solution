@@ -79,6 +79,10 @@ class EscrowManager:
             print(f"Error releasing escrow {transaction_id}: {e}")
             return False
 
+    def release_escrow(self, transaction_id: str) -> bool:
+        """Alias for release_funds."""
+        return self.release_funds(transaction_id)
+
     def refund_sender(self, transaction_id: str) -> bool:
         """
         Returns held funds back to the sender.

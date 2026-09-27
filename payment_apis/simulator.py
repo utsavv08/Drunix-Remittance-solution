@@ -31,10 +31,10 @@ class PaymentAPISimulator:
         transaction_id = str(uuid.uuid4())
         
         # Simulate network latency
-        time.sleep(0.1)
+        time.sleep(0.01)
 
-        # Randomly fail for simulation realism
-        if random.random() < 0.05:
+        # Fail if sender requested simulated failure
+        if sender_id.endswith("_FAIL"):
             status = PaymentStatus.FAILED.value
             details = "Simulated bank network error"
         else:

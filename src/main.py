@@ -121,6 +121,11 @@ class RemittanceService:
 if __name__ == "__main__":
     # Mock initialization for demonstration
     mock_drunix_api = DrunixPlatform()
+    # Pre-register mock accounts on the platform ledger
+    mock_drunix_api._ledger["alice"] = 1000000.0
+    mock_drunix_api._ledger["bob"] = 0.0
+    mock_drunix_api._ledger["escrow_account"] = 0.0
+
     remittance_service = RemittanceService(mock_drunix_api)
 
     try:
