@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drunix Cross-Border Remittance Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    font-mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-cyan-500 selection:text-black">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-400 flex items-center justify-center font-extrabold text-white text-lg shadow-lg shadow-indigo-500/20">
+          D
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-extrabold text-white">Drunix Remittance</h1>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-700/60 text-cyan-300 font-bold uppercase">
+              Vercel Live
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">Cross-Border Settlement & Smart Escrow Protocol</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-xs text-slate-300 font-mono">Drunix Node: <strong>Active</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Left: Remittance Form -->
+    <div class="lg:col-span-1 bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+      <div class="border-b border-slate-800 pb-4">
+        <h2 class="text-base font-bold text-white">Initiate Remittance</h2>
+        <p class="text-xs text-slate-400 mt-0.5">Send funds across borders with automated escrow & compliance</p>
+      </div>
+
+      <form id="remitForm" class="space-y-4">
+        <div>
+          <label class="text-xs font-semibold text-slate-300 block mb-1">Sender ID / Wallet</label>
+          <input type="text" id="senderId" value="USR_USA_001" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-mono focus:outline-none focus:border-cyan-500" required />
+        </div>
+
+        <div>
+          <label class="text-xs font-semibold text-slate-300 block mb-1">Receiver ID / Wallet</label>
+          <input type="text" id="receiverId" value="USR_MEX_001" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-mono focus:outline-none focus:border-cyan-500" required />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-semibold text-slate-300 block mb-1">Amount</label>
+            <input type="number" id="amount" value="5000" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-mono font-bold focus:outline-none focus:border-cyan-500" required />
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-slate-300 block mb-1">Currency</label>
+            <select id="currency" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-xs text-white font-mono focus:outline-none focus:border-cyan-500">
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="INR">INR (₹)</option>
+              <option value="NGN">NGN (₦)</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-2">
+          <span>⚡ Execute Cross-Border Transfer</span>
+        </button>
+      </form>
+
+      <!-- Quick Test Scenarios -->
+      <div class="pt-4 border-t border-slate-800 text-xs space-y-2">
+        <span class="text-slate-400 font-bold block">Quick Test Scenarios:</span>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" onclick="setScenario('USR_USA_001', 'USR_MEX_001', 5000)" class="p-2 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-800 text-[11px] text-slate-300 text-left">
+            ✅ Standard $5k Transfer
+          </button>
+          <button type="button" onclick="setScenario('blacklisted_user_01', 'USR_MEX_001', 1000)" class="p-2 rounded-lg bg-slate-950 hover:bg-slate-800 border border-slate-800 text-[11px] text-red-300 text-left">
+            🚫 Blocked AML Sanction
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Execution Log & Stepper -->
+    <div class="lg:col-span-2 space-y-6">
+      
+      <!-- Stepper visual -->
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl">
+        <h3 class="text-sm font-bold text-white mb-4">4-Stage Settlement Pipeline</h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+          <div id="step1" class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+            <span class="text-[10px] text-slate-500 font-mono block">STAGE 1</span>
+            <span class="font-bold text-slate-300 block mt-0.5">AML Compliance</span>
+            <span class="text-[10px] text-slate-500 block mt-1" id="step1Status">Pending</span>
+          </div>
+
+          <div id="step2" class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+            <span class="text-[10px] text-slate-500 font-mono block">STAGE 2</span>
+            <span class="font-bold text-slate-300 block mt-0.5">Payment Rail Init</span>
+            <span class="text-[10px] text-slate-500 block mt-1" id="step2Status">Pending</span>
+          </div>
+
+          <div id="step3" class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+            <span class="text-[10px] text-slate-500 font-mono block">STAGE 3</span>
+            <span class="font-bold text-slate-300 block mt-0.5">Drunix Escrow</span>
+            <span class="text-[10px] text-slate-500 block mt-1" id="step3Status">Pending</span>
+          </div>
+
+          <div id="step4" class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+            <span class="text-[10px] text-slate-500 font-mono block">STAGE 4</span>
+            <span class="font-bold text-slate-300 block mt-0.5">Disbursal & DvP</span>
+            <span class="text-[10px] text-slate-500 block mt-1" id="step4Status">Pending</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Execution Logs & Result -->
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-white">Live Execution Terminal</h3>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-950 text-cyan-400 border border-slate-800">REST /api/remit</span>
+        </div>
+
+        <div id="terminal" class="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-300 min-h-[220px] max-h-[300px] overflow-y-auto space-y-1.5 leading-relaxed">
+          <div class="text-slate-500">// System ready. Click "Execute Cross-Border Transfer" to test live pipeline.</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="border-t border-slate-900 bg-slate-950 py-4 text-center text-xs text-slate-500">
+    Drunix Cross-Border Remittance • Deployed on Vercel Serverless
+  </footer>
+
+  <script>
+    function setScenario(sender, receiver, amount) {
+      document.getElementById('senderId').value = sender;
+      document.getElementById('receiverId').value = receiver;
+      document.getElementById('amount').value = amount;
+    }
+
+    function log(msg, color = 'text-slate-300') {
+      const term = document.getElementById('terminal');
+      const line = document.createElement('div');
+      line.className = color;
+      line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      term.appendChild(line);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    document.getElementById('remitForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳ Processing via Drunix Engine...</span>';
+
+      const sender_id = document.getElementById('senderId').value;
+      const receiver_id = document.getElementById('receiverId').value;
+      const amount = parseFloat(document.getElementById('amount').value);
+      const currency = document.getElementById('currency').value;
+
+      document.getElementById('terminal').innerHTML = '';
+      log(`Initiating transfer: ${sender_id} -> ${receiver_id} (${amount} ${currency})`, 'text-cyan-400');
+
+      try {
+        const res = await fetch('/api/remit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sender_id, receiver_id, amount, currency })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          log('✅ Stage 1/4: AML & Sanction Compliance Passed', 'text-emerald-400');
+          log(`✅ Stage 2/4: Payment Gateway Tracking ID: ${data.data.external_tracking_id}`, 'text-blue-400');
+          log(`✅ Stage 3/4: Deployed & Funded Drunix Escrow Contract: ${data.data.drunix_contract_id}`, 'text-indigo-400');
+          log(`✅ Stage 4/4: Settlement Disbursed to Recipient (${data.data.workflow_status})`, 'text-emerald-400 font-bold');
+
+          document.getElementById('step1Status').textContent = 'PASSED ✅';
+          document.getElementById('step2Status').textContent = 'INITIATED ✅';
+          document.getElementById('step3Status').textContent = 'FUNDED ✅';
+          document.getElementById('step4Status').textContent = 'DISBURSED ✅';
+        } else {
+          log(`❌ Transfer Aborted: ${data.error}`, 'text-red-400 font-bold');
+          document.getElementById('step1Status').textContent = 'REJECTED ❌';
+        }
+      } catch (err) {
+        log(`❌ Network Error: ${err.message}`, 'text-red-400');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>⚡ Execute Cross-Border Transfer</span>';
+      }
+    });
+  </script>
+</body>
+</html>
