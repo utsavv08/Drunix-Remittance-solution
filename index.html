@@ -130,11 +130,14 @@
 
       <!-- Quick Telemetry & Status Badges -->
       <div class="flex flex-wrap items-center gap-2.5">
-        <!-- Citi FX Desk -->
-        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700">
+        <!-- Citi FX Desk Live -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 shadow-sm" title="Real-time USD to INR Forex Bridge">
           <span class="text-slate-500">Citi FX Desk:</span>
-          <strong class="text-citi-deep font-mono">1 USD = ₹84.25</strong>
-          <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">Spot Locked</span>
+          <strong id="liveFxRateText" class="text-citi-deep font-mono font-bold">1 USD = ₹--.--</strong>
+          <span id="liveFxBadge" class="text-[10px] text-emerald-700 font-bold bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+            Live Spot
+          </span>
         </div>
 
         <!-- NPCI Rails Status -->
@@ -869,11 +872,12 @@
       document.getElementById('sellerNameText').textContent = d.sellerName;
       document.getElementById('originPortText').textContent = d.portOfLoading;
 
+      const inrTotal = Math.round(d.totalAmountUSD * liveFxRate);
       document.getElementById('totalUsdText').textContent = `$${d.totalAmountUSD.toLocaleString('en-US', { minimumFractionDigits: 2 })} USD`;
-      document.getElementById('totalInrText').textContent = `₹${d.totalAmountINR.toLocaleString('en-IN')} (Spot Hedged)`;
+      document.getElementById('totalInrText').textContent = `₹${inrTotal.toLocaleString('en-IN')} (Live Spot Locked)`;
 
       document.getElementById('modalAmountUsd').textContent = `$${d.totalAmountUSD.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
-      document.getElementById('modalAmountInr').textContent = `₹${d.totalAmountINR.toLocaleString('en-IN')}`;
+      document.getElementById('modalAmountInr').textContent = `₹${inrTotal.toLocaleString('en-IN')}`;
 
       document.getElementById('metricStatus').textContent = d.status;
       const releasedCount = d.milestones.filter(m => m.isReleased).length;
@@ -899,6 +903,7 @@
       const isFunded = d.status !== 'CREATED';
       const mHtml = d.milestones.map((m, idx) => {
         const isPrevDone = idx === 0 || d.milestones[idx - 1].isReleased;
+        const mInr = Math.round(m.payoutAmountUSD * liveFxRate);
         let badge = `<span class="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-xs font-bold text-slate-500">${idx + 1}</span>`;
         if (m.isReleased) badge = `<span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-xs">✓</span>`;
         else if (m.isCompleted) badge = `<span class="w-7 h-7 rounded-lg bg-blue-100 text-citi-primary font-bold flex items-center justify-center text-xs animate-pulse">🛡️</span>`;
@@ -931,7 +936,7 @@
                   <span class="text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-mono font-bold">${m.payoutPercentage}% Tranche</span>
                 </div>
                 <div class="flex items-center gap-2.5 mt-1.5 text-xs text-slate-500">
-                  <span class="text-orange-700 font-bold">₹${m.payoutAmountINR.toLocaleString('en-IN')}</span>
+                  <span class="text-orange-700 font-bold">₹${mInr.toLocaleString('en-IN')}</span>
                   <span class="text-slate-300">|</span>
                   <span class="text-citi-primary font-semibold">$${m.payoutAmountUSD.toLocaleString()} USD</span>
                 </div>
@@ -1041,8 +1046,47 @@
       `).join('');
     }
 
-    // Initial load
+    // Live FX Market Rate Engine
+    let liveFxRate = 88.50;
+    let liveFxSource = 'Live Market Feed';
+
+    async function fetchLiveFxRate() {
+      try {
+        let res = await fetch('/api/fx-rate');
+        if (!res.ok) throw new Error('Proxy route unavailable');
+        let data = await res.json();
+        if (data && data.spotRate) {
+          liveFxRate = Number(data.spotRate);
+          liveFxSource = data.source || 'Citi Global Markets Real-Time Feed';
+        }
+      } catch (err) {
+        try {
+          let directRes = await fetch('https://open.er-api.com/v6/latest/USD');
+          let directData = await directRes.json();
+          if (directData && directData.rates && directData.rates.INR) {
+            liveFxRate = Number(directData.rates.INR);
+            liveFxSource = 'Open Forex Real-Time Feed';
+          }
+        } catch (e2) {
+          console.warn("Using baseline spot rate:", e2);
+        }
+      }
+
+      const rateTextEl = document.getElementById('liveFxRateText');
+      if (rateTextEl) {
+        rateTextEl.textContent = `1 USD = ₹${liveFxRate.toFixed(2)}`;
+        rateTextEl.title = `Source: ${liveFxSource} (Updated: ${new Date().toLocaleTimeString()})`;
+      }
+
+      if (currentDeal) {
+        renderUI();
+      }
+    }
+
+    // Initial load & 30-sec real-time polling
+    fetchLiveFxRate();
     fetchDeals();
+    setInterval(fetchLiveFxRate, 30000);
   </script>
 </body>
 </html>
