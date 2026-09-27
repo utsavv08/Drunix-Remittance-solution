@@ -625,16 +625,16 @@
       </div>
 
       <!-- Video Selection Tabs -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-2">
         
         <button onclick="switchVideo('/videos/hero_corridor.mp4', 'Video 1: Global Trade & Escrow Corridor', 0)" class="video-nav-btn p-2.5 rounded-xl bg-citi-surface border border-citi-cyan text-left text-xs font-semibold text-white transition-all hover:border-citi-cyan focus:outline-none">
           <span class="text-[10px] text-cyan-400 font-mono block">01 / CORRIDOR</span>
-          <span class="font-bold text-[11px] block mt-0.5">Global Trade Route</span>
+          <span class="font-bold text-[11px] block mt-0.5">Trade Route</span>
         </button>
 
         <button onclick="switchVideo('/videos/smart_escrow_dvp.mp4', 'Video 2: Atomic DvP Escrow & IoT Oracle Delivery', 1)" class="video-nav-btn p-2.5 rounded-xl bg-citi-surface border border-citi-border text-left text-xs font-semibold text-slate-300 transition-all hover:border-citi-cyan focus:outline-none">
           <span class="text-[10px] text-emerald-400 font-mono block">02 / SMART DvP</span>
-          <span class="font-bold text-[11px] block mt-0.5">IoT Oracle Delivery</span>
+          <span class="font-bold text-[11px] block mt-0.5">IoT Delivery</span>
         </button>
 
         <button onclick="switchVideo('/videos/dual_rail_flow.mp4', 'Video 3: NPCI UPI 2.0 to Citi Treasury Rails', 2)" class="video-nav-btn p-2.5 rounded-xl bg-citi-surface border border-citi-border text-left text-xs font-semibold text-slate-300 transition-all hover:border-citi-cyan focus:outline-none">
@@ -645,6 +645,11 @@
         <button onclick="switchVideo('/videos/global_network.mp4', 'Video 4: Global Institutional Liquidity Network', 3)" class="video-nav-btn p-2.5 rounded-xl bg-citi-surface border border-citi-border text-left text-xs font-semibold text-slate-300 transition-all hover:border-citi-cyan focus:outline-none">
           <span class="text-[10px] text-indigo-400 font-mono block">04 / NETWORK</span>
           <span class="font-bold text-[11px] block mt-0.5">Citi Global Grid</span>
+        </button>
+
+        <button onclick="switchVideo('/videos/trade_settlement_flow.mp4', 'Video 5: e-RUPI Programmable Voucher & Milestone Settlement', 4)" class="video-nav-btn p-2.5 rounded-xl bg-citi-surface border border-citi-border text-left text-xs font-semibold text-slate-300 transition-all hover:border-citi-cyan focus:outline-none col-span-2 sm:col-span-1">
+          <span class="text-[10px] text-amber-400 font-mono block">05 / SETTLEMENT</span>
+          <span class="font-bold text-[11px] block mt-0.5">e-RUPI Voucher</span>
         </button>
 
       </div>
@@ -967,6 +972,11 @@
         src: '/videos/global_network.mp4',
         title: 'Video 4: Global Institutional Liquidity Network',
         prompt: 'Cinematic motion graphics of an institutional banking trade bridge. Floating holographic Citi treasury node in New York connects over high-speed glowing light fibers to an NPCI gateway in Mumbai. Luminous cyan ISO 20022 wire packets and orange UPI remittance tokens stream in real-time across a rotating dark-navy globe.'
+      },
+      {
+        src: '/videos/trade_settlement_flow.mp4',
+        title: 'Video 5: e-RUPI Programmable Voucher & Milestone Settlement',
+        prompt: 'Futuristic smartphone screen displaying a CitiFlow Trade Escrow dynamic QR code. A biometric scan verifies the Customs Bill of Entry on ICEGATE, instantly generating a green e-RUPI purpose voucher with cryptographic hash. Smooth holographic animations, clean minimalist fintech interface.'
       }
     ];
 
