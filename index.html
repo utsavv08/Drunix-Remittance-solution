@@ -176,9 +176,6 @@
       </div>
 
       <div class="flex items-center gap-2.5">
-        <button onclick="openVideoModal()" class="px-4 py-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-citi-primary text-xs font-bold flex items-center gap-1.5 transition-all border border-blue-200">
-          <span>🎬 Architecture Video Walkthrough</span>
-        </button>
         <button onclick="openCreateModal()" class="px-4 py-2 rounded-lg bg-citi-primary hover:bg-citi-hover text-white text-xs font-bold flex items-center gap-2 transition-all shadow-sm">
           <span>➕ New Trade Agreement</span>
         </button>
@@ -254,6 +251,56 @@
       </div>
 
     </div>
+
+    <!-- Direct Embedded Video Showcase Section -->
+    <section class="bg-white rounded-2xl shadow-citi-card border border-slate-200/90 overflow-hidden">
+      <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-citi-primary border border-blue-200 text-[10px] font-bold uppercase tracking-wider">
+              Institutional Video Showcase
+            </span>
+            <span class="text-xs text-slate-400 font-mono">• Merged 4K/1080p Video</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-citi-deep">CitiFlow Escrow — Institutional Execution & Smart Settlement</h3>
+          <p class="text-xs text-slate-500">Live operational demonstration showcasing realistic institutional treasury flows, smart escrow DvP locking, and real-time execution.</p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="text-[11px] px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Direct Video Player
+          </span>
+        </div>
+      </div>
+
+      <div class="p-5 sm:p-6 bg-slate-50/60">
+        <!-- Direct Embedded Video Player -->
+        <div class="relative rounded-xl overflow-hidden bg-slate-950 shadow-lg aspect-video max-h-[460px] mx-auto w-full flex items-center justify-center border border-slate-800">
+          <video id="homepageArchitectureVideo" class="w-full h-full object-cover" controls autoplay loop muted playsinline>
+            <source src="/videos/citiflow_showcase.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+          </video>
+        </div>
+        
+        <!-- Video Phase Breakdown Cards -->
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs text-slate-600">
+          <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm flex items-start gap-3">
+            <span class="text-lg">🏛️</span>
+            <div>
+              <strong class="text-citi-deep block">Phase 1: Institutional Escrow & Treasury Operations</strong>
+              <span class="text-[11px] text-slate-500">Citi corporate vault engagement with automated ISO 20022 camt.053 message ingestion and dynamic FX locking.</span>
+            </div>
+          </div>
+          <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm flex items-start gap-3">
+            <span class="text-lg">⚡</span>
+            <div>
+              <strong class="text-citi-deep block">Phase 2: Programmable Settlement & Delivery vs. Payment</strong>
+              <span class="text-[11px] text-slate-500">Atomic DvP release triggered by real-time customs clearance and NPCI UPI 2.0 dual-rail execution.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Navigation Tabs (Clean Citi Pill Style) -->
     <div class="flex border-b border-slate-200 gap-2 overflow-x-auto bg-white px-2 rounded-xl shadow-citi-sm">
@@ -506,78 +553,6 @@
     </div>
   </div>
 
-  <!-- Video Walkthrough Cinema Modal -->
-  <div id="videoModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm">
-    <div class="relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl p-6 sm:p-7 space-y-4 max-h-[92vh] overflow-y-auto border border-slate-200">
-      
-      <div class="flex justify-between items-center pb-3 border-b border-slate-100">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-blue-50 text-citi-primary flex items-center justify-center font-bold text-sm">
-            🎬
-          </div>
-          <div>
-            <h3 class="text-base font-extrabold text-citi-deep">CitiFlow Escrow — 4K System Architecture & Showcase</h3>
-            <p class="text-[11px] text-slate-500">Generated via Gemini Video Generator (Veo / Imagen Video)</p>
-          </div>
-        </div>
-        <button onclick="closeVideoModal()" class="text-slate-400 hover:text-slate-700 text-lg">✕</button>
-      </div>
-
-      <!-- Video Player Screen -->
-      <div class="relative rounded-xl overflow-hidden bg-slate-950 shadow-lg aspect-video max-h-[380px] w-full flex items-center justify-center">
-        <video id="cinemaVideoPlayer" class="w-full h-full object-cover" controls autoplay loop muted playsinline>
-          <source id="cinemaVideoSource" src="/videos/hero_corridor.mp4" type="video/mp4">
-          Your browser does not support HTML5 video.
-        </video>
-        <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md border border-cyan-400/50 text-[10px] font-mono font-bold text-white flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-          <span id="cinemaVideoTitle">Video 1: Global Trade & Escrow Corridor</span>
-        </div>
-      </div>
-
-      <!-- Video Selection Tabs -->
-      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-2">
-        
-        <button onclick="switchVideo('/videos/hero_corridor.mp4', 'Video 1: Global Trade & Escrow Corridor', 0)" class="video-nav-btn p-2.5 rounded-xl bg-blue-50 border border-citi-primary text-left text-xs font-semibold transition-all focus:outline-none">
-          <span class="text-[10px] text-citi-primary font-mono block font-bold">01 / CORRIDOR</span>
-          <span class="font-bold text-[11px] text-citi-deep block mt-0.5">Trade Route</span>
-        </button>
-
-        <button onclick="switchVideo('/videos/smart_escrow_dvp.mp4', 'Video 2: Atomic DvP Escrow & IoT Oracle Delivery', 1)" class="video-nav-btn p-2.5 rounded-xl bg-white border border-slate-200 text-left text-xs font-semibold text-slate-600 transition-all hover:border-citi-primary focus:outline-none">
-          <span class="text-[10px] text-emerald-600 font-mono block font-bold">02 / SMART DvP</span>
-          <span class="font-bold text-[11px] text-slate-800 block mt-0.5">IoT Delivery</span>
-        </button>
-
-        <button onclick="switchVideo('/videos/dual_rail_flow.mp4', 'Video 3: NPCI UPI 2.0 to Citi Treasury Rails', 2)" class="video-nav-btn p-2.5 rounded-xl bg-white border border-slate-200 text-left text-xs font-semibold text-slate-600 transition-all hover:border-citi-primary focus:outline-none">
-          <span class="text-[10px] text-orange-600 font-mono block font-bold">03 / DUAL-RAIL</span>
-          <span class="font-bold text-[11px] text-slate-800 block mt-0.5">UPI & ISO Wire</span>
-        </button>
-
-        <button onclick="switchVideo('/videos/global_network.mp4', 'Video 4: Global Institutional Liquidity Network', 3)" class="video-nav-btn p-2.5 rounded-xl bg-white border border-slate-200 text-left text-xs font-semibold text-slate-600 transition-all hover:border-citi-primary focus:outline-none">
-          <span class="text-[10px] text-indigo-600 font-mono block font-bold">04 / NETWORK</span>
-          <span class="font-bold text-[11px] text-slate-800 block mt-0.5">Citi Global Grid</span>
-        </button>
-
-        <button onclick="switchVideo('/videos/trade_settlement_flow.mp4', 'Video 5: e-RUPI Programmable Voucher & Milestone Settlement', 4)" class="video-nav-btn p-2.5 rounded-xl bg-white border border-slate-200 text-left text-xs font-semibold text-slate-600 transition-all hover:border-citi-primary focus:outline-none col-span-2 sm:col-span-1">
-          <span class="text-[10px] text-amber-600 font-mono block font-bold">05 / SETTLEMENT</span>
-          <span class="font-bold text-[11px] text-slate-800 block mt-0.5">e-RUPI Voucher</span>
-        </button>
-
-      </div>
-
-      <!-- Active Prompt Details -->
-      <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1 font-mono text-[11px]">
-        <div class="flex justify-between items-center">
-          <span class="text-citi-deep font-bold block" id="cinemaPromptLabel">Active Prompt Specification:</span>
-          <span class="text-[10px] text-slate-400 font-mono">Veo 4K • 60fps</span>
-        </div>
-        <p class="text-slate-600 text-[11px] leading-relaxed" id="cinemaPromptText">
-          "Cinematic 4K 3D motion graphics animation of a futuristic global trade settlement network. Glowing digital trade routes connect Mumbai Port (JNPT) and Citi World Headquarters in New York across a rotating holographic dark-navy globe. Floating golden digital Bills of Lading (e-BL) and glowing neon orange (UPI) and electric cyan (ISO 20022 wire) data streams flow seamlessly through cryptographic smart contract escrow nodes."
-        </p>
-      </div>
-
-    </div>
-  </div>
 
   <!-- Create Deal Modal -->
   <div id="createDealModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
@@ -705,63 +680,6 @@
     function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); }
     function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); }
 
-    const videoData = [
-      {
-        src: '/videos/hero_corridor.mp4',
-        title: 'Video 1: Global Trade Corridor & Smart Escrow',
-        prompt: 'Cinematic 4K 3D motion graphics animation of a futuristic global trade settlement network. Glowing digital trade routes connect Mumbai Port (JNPT) and Citi World Headquarters in New York across a rotating holographic dark-navy globe. Floating golden digital Bills of Lading (e-BL) and glowing neon orange (UPI) and electric cyan (ISO 20022 wire) data streams flow seamlessly through cryptographic smart contract escrow nodes.'
-      },
-      {
-        src: '/videos/smart_escrow_dvp.mp4',
-        title: 'Video 2: Atomic DvP Escrow & IoT Container Oracle',
-        prompt: 'Close-up cinematic 3D render of a smart shipping container with glowing green IoT sensor telemetry scanning digital customs stamps at an automated seaport dock. A holographic smart contract escrow vault unlocks in real-time, instantly releasing dual-rail payments in Digital Rupee (e-RUPI) and Citi USD wires with cryptographic green confirmation checkmarks.'
-      },
-      {
-        src: '/videos/dual_rail_flow.mp4',
-        title: 'Video 3: Mobile & NPCI UPI 2.0 to Citi Treasury',
-        prompt: 'Smooth macro shot of a sleek glass mobile device showing an NPCI dynamic UPI 2.0 biometric approval screen, transitioning into an institutional Citibank treasury portal executing an automated ISO 20022 pacs.008 wire transfer. Electric blue and saffron particle trails, clean UI/UX showcase.'
-      },
-      {
-        src: '/videos/global_network.mp4',
-        title: 'Video 4: Global Institutional Liquidity Network',
-        prompt: 'Cinematic motion graphics of an institutional banking trade bridge. Floating holographic Citi treasury node in New York connects over high-speed glowing light fibers to an NPCI gateway in Mumbai. Luminous cyan ISO 20022 wire packets and orange UPI remittance tokens stream in real-time across a rotating dark-navy globe.'
-      },
-      {
-        src: '/videos/trade_settlement_flow.mp4',
-        title: 'Video 5: e-RUPI Programmable Voucher & Milestone Settlement',
-        prompt: 'Futuristic smartphone screen displaying a CitiFlow Trade Escrow dynamic QR code. A biometric scan verifies the Customs Bill of Entry on ICEGATE, instantly generating a green e-RUPI purpose voucher with cryptographic hash. Smooth holographic animations, clean minimalist fintech interface.'
-      }
-    ];
-
-    function openVideoModal() { 
-      document.getElementById('videoModal').classList.remove('hidden'); 
-      const player = document.getElementById('cinemaVideoPlayer');
-      if (player) player.play();
-    }
-    function closeVideoModal() { 
-      document.getElementById('videoModal').classList.add('hidden'); 
-      const player = document.getElementById('cinemaVideoPlayer');
-      if (player) player.pause();
-    }
-
-    function switchVideo(src, title, index) {
-      const player = document.getElementById('cinemaVideoPlayer');
-      player.src = src;
-      player.play();
-      document.getElementById('cinemaVideoTitle').textContent = title;
-      document.getElementById('cinemaPromptText').textContent = `"${videoData[index].prompt}"`;
-      
-      const btns = document.querySelectorAll('.video-nav-btn');
-      btns.forEach((btn, idx) => {
-        if (idx === index) {
-          btn.classList.add('border-citi-primary', 'bg-blue-50');
-          btn.classList.remove('border-slate-200', 'bg-white');
-        } else {
-          btn.classList.remove('border-citi-primary', 'bg-blue-50');
-          btn.classList.add('border-slate-200', 'bg-white');
-        }
-      });
-    }
 
     function openCreateModal() { document.getElementById('createDealModal').classList.remove('hidden'); }
     function closeCreateModal() { document.getElementById('createDealModal').classList.add('hidden'); }
