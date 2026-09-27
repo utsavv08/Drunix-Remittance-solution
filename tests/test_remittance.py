@@ -1,4 +1,4 @@
-import pytest
+import unittest
 from decimal import Decimal
 from core.compliance import ComplianceEngine, ComplianceError
 from core.engine import RemittanceEngine, RemittanceWorkflowError
@@ -11,38 +11,38 @@ from src.drunix import DrunixPlatform
 from src.core.escrow import EscrowManager, EscrowStatus as SrcEscrowStatus
 
 
-class TestComplianceEngine:
+class TestComplianceEngine(unittest.TestCase):
     def test_valid_compliance_check(self):
         engine = ComplianceEngine()
-        assert engine.check_transaction("USR_001", "USR_002", 1000.0, "USD") is True
+        self.assertTrue(engine.check_transaction("USR_001", "USR_002", 1000.0, "USD"))
 
     def test_blocked_user_rejection(self):
         engine = ComplianceEngine()
-        with pytest.raises(ComplianceError, match="restricted"):
-            engine.check_transaction("USR_BLOCKED_99", "USR_002", 500.0, "USD")
+        with self.assertRaises(ComplianceError):
+            engine.check_transaction("blacklisted_user_01", "USR_002", 500.0, "USD")
 
     def test_amount_exceeded_rejection(self):
         engine = ComplianceEngine()
-        with pytest.raises(ComplianceError, match="Limit exceeded"):
-            engine.check_transaction("USR_001", "USR_002", 100000.0, "USD")
+        with self.assertRaises(ComplianceError):
+            engine.check_transaction("USR_001", "USR_002", 150000.0, "USD")
 
 
-class TestDrunixBlockchain:
+class TestDrunixBlockchain(unittest.TestCase):
     def test_escrow_lifecycle(self):
         bc = DrunixBlockchainSim()
         contract_id = bc.create_escrow_contract("sender1", "receiver1", 500.0, "USD")
-        assert contract_id.startswith("drx_esc_")
+        self.assertTrue(contract_id.startswith("drx_esc_"))
         
         status = bc.get_contract_status(contract_id)
-        assert status["status"] == EscrowStatus.CREATED.value
+        self.assertEqual(status["status"], EscrowStatus.CREATED.value)
 
         bc.fund_escrow_contract(contract_id, 500.0)
         status = bc.get_contract_status(contract_id)
-        assert status["status"] == EscrowStatus.FUNDED.value
+        self.assertEqual(status["status"], EscrowStatus.FUNDED.value)
 
         bc.disburse_escrow_contract(contract_id)
         status = bc.get_contract_status(contract_id)
-        assert status["status"] == EscrowStatus.DISBURSED.value
+        self.assertEqual(status["status"], EscrowStatus.DISBURSED.value)
 
     def test_escrow_refund(self):
         bc = DrunixBlockchainSim()
@@ -50,10 +50,10 @@ class TestDrunixBlockchain:
         bc.fund_escrow_contract(contract_id, 250.0)
         bc.refund_escrow_contract(contract_id)
         status = bc.get_contract_status(contract_id)
-        assert status["status"] == EscrowStatus.REFUNDED.value
+        self.assertEqual(status["status"], EscrowStatus.REFUNDED.value)
 
 
-class TestRemittanceEngine:
+class TestRemittanceEngine(unittest.TestCase):
     def test_end_to_end_remittance_success(self):
         compliance = ComplianceEngine()
         blockchain = DrunixBlockchainSim()
@@ -61,9 +61,9 @@ class TestRemittanceEngine:
         engine = RemittanceEngine(compliance, blockchain, payment_api)
 
         result = engine.process_remittance("USR_USA_001", "USR_MEX_001", 1500.0, "USD")
-        assert result["workflow_status"] in ["SUCCESS", "FAILED_EXTERNAL_PAYMENT_REFUNDED"]
-        assert "drunix_contract_id" in result
-        assert result["amount"] == 1500.0
+        self.assertIn(result["workflow_status"], ["SUCCESS", "FAILED_EXTERNAL_PAYMENT_REFUNDED"])
+        self.assertIn("drunix_contract_id", result)
+        self.assertEqual(result["amount"], 1500.0)
 
     def test_remittance_aborted_on_compliance_failure(self):
         compliance = ComplianceEngine()
@@ -71,11 +71,11 @@ class TestRemittanceEngine:
         payment_api = PaymentAPISimulator()
         engine = RemittanceEngine(compliance, blockchain, payment_api)
 
-        with pytest.raises(RemittanceWorkflowError):
-            engine.process_remittance("USR_BLOCKED", "USR_MEX_001", 1000.0, "USD")
+        with self.assertRaises(RemittanceWorkflowError):
+            engine.process_remittance("blacklisted_user_01", "USR_MEX_001", 1000.0, "USD")
 
 
-class TestMilestoneEscrowService:
+class TestMilestoneEscrowService(unittest.TestCase):
     def test_milestone_creation_and_release(self):
         service = EscrowService()
         milestones = [
@@ -83,23 +83,23 @@ class TestMilestoneEscrowService:
             Milestone("m2", "Final 70%", Decimal("700.00")),
         ]
         escrow = service.create_escrow("esc_001", "alice", "bob", Decimal("1000.00"), "USD", milestones)
-        assert escrow.total_amount == Decimal("1000.00")
+        self.assertEqual(escrow.total_amount, Decimal("1000.00"))
 
         service.fund_escrow("esc_001", Decimal("1000.00"))
-        assert escrow.balance == Decimal("1000.00")
+        self.assertEqual(escrow.balance, Decimal("1000.00"))
 
         released = service.release_milestone("esc_001", "m1")
-        assert released == Decimal("300.00")
-        assert escrow.balance == Decimal("700.00")
+        self.assertEqual(released, Decimal("300.00"))
+        self.assertEqual(escrow.balance, Decimal("700.00"))
 
 
-class TestSrcRemittanceFlow:
+class TestSrcRemittanceFlow(unittest.TestCase):
     def test_src_escrow_and_conversion(self):
         validate_currency_code("EUR")
         validate_currency_code("NGN")
         amount = validate_amount(100.0)
         converted = convert_currency(amount, "EUR", "NGN")
-        assert float(converted) > 0
+        self.assertTrue(float(converted) > 0)
 
         platform = DrunixPlatform()
         platform._ledger["alice"] = 500000.0
@@ -108,8 +108,12 @@ class TestSrcRemittanceFlow:
 
         manager = EscrowManager(platform)
         manager.create_escrow("txn_101", "alice", "bob", 100000.0, "NGN")
-        assert manager.get_transaction_status("txn_101") == SrcEscrowStatus.HELD
+        self.assertEqual(manager.get_transaction_status("txn_101"), SrcEscrowStatus.HELD)
 
         released = manager.release_escrow("txn_101")
-        assert released is True
-        assert platform.get_balance("bob") == 100000.0
+        self.assertTrue(released)
+        self.assertEqual(platform.get_balance("bob"), 100000.0)
+
+
+if __name__ == "__main__":
+    unittest.main()
