@@ -103,51 +103,58 @@
 
   <!-- Primary Header & Navigation -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-40 citi-arc-top shadow-citi-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 sm:gap-4">
       
       <!-- Brand & Integrated Logos -->
-      <div class="flex items-center gap-4">
-        <!-- Official Citi Logo -->
-        <a href="/" class="flex items-center">
-          <img src="/images/citi_logo.png" alt="Citi" class="h-8 w-auto object-contain" />
-        </a>
+      <div class="flex items-center gap-3 sm:gap-4 w-full md:w-auto justify-between md:justify-start">
+        <div class="flex items-center gap-3">
+          <!-- Official Citi Logo -->
+          <a href="/" class="flex items-center shrink-0">
+            <img src="/images/citi_logo.png" alt="Citi" class="h-7 sm:h-8 w-auto object-contain" />
+          </a>
 
-        <span class="text-slate-300 text-xl font-light">|</span>
+          <span class="text-slate-300 text-lg sm:text-xl font-light">|</span>
 
-        <!-- App Identity -->
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-lg font-extrabold text-citi-deep tracking-tight">Citi<span class="text-citi-primary">Flow</span> Escrow</h1>
-            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-citi-primary border border-blue-200">
-              DvP Settlement
-            </span>
+          <!-- App Identity -->
+          <div>
+            <div class="flex items-center gap-1.5 sm:gap-2">
+              <h1 class="text-base sm:text-lg font-extrabold text-citi-deep tracking-tight">Citi<span class="text-citi-primary">Flow</span> Escrow</h1>
+              <span class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-blue-50 text-citi-primary border border-blue-200 shrink-0">
+                DvP Escrow
+              </span>
+            </div>
+            <p class="text-[10px] sm:text-[11px] text-slate-500 font-normal">
+              Citi Global Treasury × NPCI Sovereign Rails on Drunix L1
+            </p>
           </div>
-          <p class="text-[11px] text-slate-500 font-normal">
-            Citi Global Treasury × NPCI Sovereign Rails on Drunix L1
-          </p>
         </div>
+
+        <!-- Mobile Sync Button -->
+        <button onclick="fetchDeals()" class="md:hidden p-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-citi-deep transition-all shrink-0" title="Synchronize deals">
+          🔄
+        </button>
       </div>
 
       <!-- Quick Telemetry & Status Badges -->
-      <div class="flex flex-wrap items-center gap-2.5">
+      <div class="flex flex-wrap items-center gap-2 w-full md:w-auto text-xs">
         <!-- Citi FX Desk Live -->
-        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700 shadow-sm" title="Real-time USD to INR Forex Bridge">
-          <span class="text-slate-500">Citi FX Desk:</span>
+        <div class="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] sm:text-xs text-slate-700 shadow-sm grow sm:grow-0 justify-between sm:justify-start" title="Real-time USD to INR Forex Bridge">
+          <span class="text-slate-500 font-medium">Citi FX:</span>
           <strong id="liveFxRateText" class="text-citi-deep font-mono font-bold">1 USD = ₹--.--</strong>
-          <span id="liveFxBadge" class="text-[10px] text-emerald-700 font-bold bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded flex items-center gap-1">
+          <span id="liveFxBadge" class="text-[9px] sm:text-[10px] text-emerald-700 font-bold bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded flex items-center gap-1">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
             Live Spot
           </span>
         </div>
 
         <!-- NPCI Rails Status -->
-        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-700">
-          <img src="/images/npci_upi_logo.png" alt="NPCI" class="h-3.5 w-auto object-contain" />
-          <span>NPCI 2.0 / e-RUPI: <strong class="text-emerald-600">Active</strong></span>
+        <div class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-[11px] sm:text-xs text-slate-700 grow sm:grow-0">
+          <img src="/images/npci_upi_logo.png" alt="NPCI" class="h-3 sm:h-3.5 w-auto object-contain" />
+          <span>NPCI 2.0: <strong class="text-emerald-600">Active</strong></span>
         </div>
 
-        <!-- Sync Button -->
-        <button onclick="fetchDeals()" class="p-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-citi-deep transition-all" title="Synchronize deals">
+        <!-- Desktop Sync Button -->
+        <button onclick="fetchDeals()" class="hidden md:inline-flex p-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-citi-deep transition-all" title="Synchronize deals">
           🔄
         </button>
       </div>
@@ -156,66 +163,66 @@
   </header>
 
   <!-- Toast Notification -->
-  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 animate-bounce">
-    <div class="px-5 py-3.5 rounded-xl bg-citi-deep text-white shadow-2xl text-xs font-bold flex items-center gap-3 border border-citi-primary">
+  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 animate-bounce max-w-[90vw]">
+    <div class="px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl bg-citi-deep text-white shadow-2xl text-xs font-bold flex items-center gap-3 border border-citi-primary">
       <span class="text-base text-cyan-300">⚡</span>
       <span id="toastText">Action completed successfully</span>
     </div>
   </div>
 
   <!-- Main Workspace -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+  <main class="flex-1 max-w-7xl w-full mx-auto px-3.5 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6">
     
     <!-- Top Action Bar & Deal Switcher -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-citi-card border border-slate-100">
-      <div class="flex items-center gap-3 flex-wrap">
-        <label for="dealSelect" class="text-xs font-bold uppercase tracking-wider text-slate-600">Active Commercial Agreement:</label>
-        <select id="dealSelect" onchange="onSelectDeal(this.value)" class="px-3.5 py-2 rounded-lg bg-slate-50 border border-slate-200 text-xs font-bold text-citi-deep focus:outline-none focus:border-citi-primary font-mono cursor-pointer">
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 bg-white p-3.5 sm:p-4 rounded-2xl shadow-citi-card border border-slate-100">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 flex-1">
+        <label for="dealSelect" class="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-600 shrink-0">Agreement:</label>
+        <select id="dealSelect" onchange="onSelectDeal(this.value)" class="w-full sm:w-auto px-3.5 py-2 rounded-lg bg-slate-50 border border-slate-200 text-xs font-bold text-citi-deep focus:outline-none focus:border-citi-primary font-mono cursor-pointer truncate">
           <!-- Populated dynamically -->
         </select>
       </div>
 
       <div class="flex items-center gap-2.5">
-        <button onclick="openCreateModal()" class="px-4 py-2 rounded-lg bg-citi-primary hover:bg-citi-hover text-white text-xs font-bold flex items-center gap-2 transition-all shadow-sm">
+        <button onclick="openCreateModal()" class="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-citi-primary hover:bg-citi-hover text-white text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-sm">
           <span>➕ New Trade Agreement</span>
         </button>
       </div>
     </div>
 
     <!-- Master Trade Hero Card (Clean Citi Light Theme) -->
-    <div class="rounded-2xl citi-hero-bg p-6 sm:p-8 shadow-citi-card border border-slate-200/80">
+    <div class="rounded-2xl citi-hero-bg p-4 sm:p-7 lg:p-8 shadow-citi-card border border-slate-200/80">
       
-      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+      <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-5 sm:gap-6">
         
         <!-- Left Deal Overview -->
         <div class="space-y-2.5 max-w-2xl">
-          <div class="flex items-center gap-2.5 flex-wrap">
-            <span id="dealRefBadge" class="text-xs font-mono font-extrabold px-3 py-1 rounded-md bg-citi-deep text-white shadow-sm">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span id="dealRefBadge" class="text-[11px] sm:text-xs font-mono font-extrabold px-2.5 sm:px-3 py-1 rounded-md bg-citi-deep text-white shadow-sm">
               PO-BHARAT-PUMP-9821
             </span>
-            <span class="text-xs text-slate-500 font-medium">
-              Institutional Vault: <strong id="escrowAccountBadge" class="text-citi-deep font-mono">CITI-IN-ESC-482910482</strong>
+            <span class="text-[11px] sm:text-xs text-slate-500 font-medium">
+              Vault: <strong id="escrowAccountBadge" class="text-citi-deep font-mono">CITI-IN-ESC-482910482</strong>
             </span>
           </div>
 
-          <h2 id="buyerNameHeader" class="text-2xl sm:text-3xl font-extrabold text-citi-deep tracking-tight">
+          <h2 id="buyerNameHeader" class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-citi-deep tracking-tight leading-tight">
             Bharat Solar Infrastructures Ltd (Mumbai, India)
           </h2>
           
-          <div class="flex items-center gap-3 text-xs text-slate-600 flex-wrap">
-            <span>Global Supplier: <strong id="sellerNameText" class="text-citi-primary font-bold">Nordic Turbine Technologies AG</strong></span>
-            <span class="text-slate-300">•</span>
-            <span>Origin Port: <strong id="originPortText" class="text-slate-800 font-semibold">Port of Hamburg (DEHAM)</strong></span>
-            <span class="text-slate-300">•</span>
-            <span>Destination: <strong class="text-emerald-700 font-semibold">Nhava Sheva JNPT (INNSA)</strong></span>
+          <div class="flex items-center gap-2 sm:gap-3 text-xs text-slate-600 flex-wrap">
+            <span>Supplier: <strong id="sellerNameText" class="text-citi-primary font-bold">Nordic Turbine Technologies AG</strong></span>
+            <span class="text-slate-300 hidden sm:inline">•</span>
+            <span>Origin: <strong id="originPortText" class="text-slate-800 font-semibold">Port of Hamburg</strong></span>
+            <span class="text-slate-300 hidden sm:inline">•</span>
+            <span>Destination: <strong class="text-emerald-700 font-semibold">Nhava Sheva JNPT</strong></span>
           </div>
         </div>
 
         <!-- Right Value Meter & Action -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div class="p-4 rounded-xl bg-white border border-slate-200 text-right min-w-[220px] shadow-sm">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Escrow Capital</span>
-            <span id="totalUsdText" class="text-2xl font-extrabold text-citi-deep font-mono block">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+          <div class="p-3.5 sm:p-4 rounded-xl bg-white border border-slate-200 text-left sm:text-right min-w-[200px] shadow-sm">
+            <span class="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Escrow Capital</span>
+            <span id="totalUsdText" class="text-xl sm:text-2xl font-extrabold text-citi-deep font-mono block">
               $50,000.00 USD
             </span>
             <span id="totalInrText" class="text-xs font-bold text-orange-600 font-mono block mt-0.5">
@@ -223,7 +230,7 @@
             </span>
           </div>
 
-          <div id="lockFundsContainer">
+          <div id="lockFundsContainer" class="w-full sm:w-auto">
             <!-- Dynamic button inserted here -->
           </div>
         </div>
@@ -231,28 +238,28 @@
       </div>
 
       <!-- Quick Metrics Ribbon -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mt-8 pt-6 border-t border-slate-200/80 text-xs">
-        <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-citi-sm">
-          <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Escrow Protocol State</span>
-          <span id="metricStatus" class="font-extrabold text-citi-deep font-mono uppercase mt-0.5 block">CREATED</span>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3.5 mt-6 pt-5 border-t border-slate-200/80 text-xs">
+        <div class="p-3 rounded-xl bg-white border border-slate-200 shadow-citi-sm">
+          <span class="text-slate-400 block text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Protocol State</span>
+          <span id="metricStatus" class="font-extrabold text-citi-deep font-mono uppercase mt-0.5 block truncate">CREATED</span>
         </div>
-        <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-citi-sm">
-          <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Capital Disbursed</span>
-          <span id="metricSettled" class="font-extrabold text-emerald-600 font-mono mt-0.5 block">0% ($0.00)</span>
+        <div class="p-3 rounded-xl bg-white border border-slate-200 shadow-citi-sm">
+          <span class="text-slate-400 block text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Disbursed</span>
+          <span id="metricSettled" class="font-extrabold text-emerald-600 font-mono mt-0.5 block truncate">0% ($0.00)</span>
         </div>
-        <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-citi-sm">
-          <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Payment Corridors</span>
-          <span class="font-extrabold text-citi-primary font-mono mt-0.5 block">NPCI UPI 2.0 / Citi ISO</span>
+        <div class="p-3 rounded-xl bg-white border border-slate-200 shadow-citi-sm">
+          <span class="text-slate-400 block text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Corridors</span>
+          <span class="font-extrabold text-citi-primary font-mono mt-0.5 block truncate">UPI 2.0 / ISO</span>
         </div>
-        <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-citi-sm">
-          <span class="text-slate-400 block text-[10px] font-bold uppercase tracking-wider">Atomic DvP Ownership</span>
-          <span id="metricDvp" class="font-extrabold text-indigo-700 font-mono mt-0.5 block">LOCKED ON-CHAIN</span>
+        <div class="p-3 rounded-xl bg-white border border-slate-200 shadow-citi-sm">
+          <span class="text-slate-400 block text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">DvP Title</span>
+          <span id="metricDvp" class="font-extrabold text-indigo-700 font-mono mt-0.5 block truncate">ON-CHAIN</span>
         </div>
       </div>
 
     </div>
 
-    <!-- Direct Embedded Video Showcase Section -->
+    <!-- Direct Embedded Video Showcase Section (Full Uncropped 16:9 Frame) -->
     <section class="bg-white rounded-2xl shadow-citi-card border border-slate-200/90 overflow-hidden">
       <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="space-y-1">
@@ -260,23 +267,27 @@
             <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-citi-primary border border-blue-200 text-[10px] font-bold uppercase tracking-wider">
               Institutional Video Showcase
             </span>
-            <span class="text-xs text-slate-400 font-mono">• Merged 4K/1080p Video</span>
+            <span class="text-xs text-slate-400 font-mono">• Full 16:9 Uncropped 4K/1080p</span>
           </div>
           <h3 class="text-base sm:text-lg font-extrabold text-citi-deep">CitiFlow Escrow — Institutional Execution & Smart Settlement</h3>
           <p class="text-xs text-slate-500">Live operational demonstration showcasing realistic institutional treasury flows, smart escrow DvP locking, and real-time execution.</p>
         </div>
         <div class="flex items-center gap-2 shrink-0">
-          <span class="text-[11px] px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 flex items-center gap-1.5">
+          <button onclick="toggleVideoFullscreen()" class="text-xs px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-citi-primary font-bold border border-blue-200 flex items-center gap-1.5 transition-all shadow-sm">
+            <span>⛶</span>
+            <span>Full Screen</span>
+          </button>
+          <span class="text-[11px] px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Direct Video Player
+            Direct 16:9 Player
           </span>
         </div>
       </div>
 
-      <div class="p-5 sm:p-6 bg-slate-50/60">
-        <!-- Direct Embedded Video Player -->
-        <div class="relative rounded-xl overflow-hidden bg-slate-950 shadow-lg aspect-video max-h-[460px] mx-auto w-full flex items-center justify-center border border-slate-800">
-          <video id="homepageArchitectureVideo" class="w-full h-full object-cover" controls autoplay loop muted playsinline>
+      <div class="p-4 sm:p-6 bg-slate-50/60">
+        <!-- Direct Embedded Video Player: Full Uncropped 16:9 Aspect Ratio -->
+        <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-slate-950 shadow-xl border border-slate-300/80 mx-auto flex items-center justify-center">
+          <video id="homepageArchitectureVideo" class="w-full h-full object-contain rounded-xl" controls autoplay loop muted playsinline>
             <source src="/videos/citiflow_showcase.mp4" type="video/mp4">
             Your browser does not support HTML5 video.
           </video>
@@ -677,8 +688,19 @@
       document.getElementById(`tabBtn${tab}`).className = 'py-3 px-4 text-xs font-extrabold flex items-center gap-2 border-b-2 border-citi-primary text-citi-primary transition-all';
     }
 
-    function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); }
-    function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); }
+    function toggleVideoFullscreen() {
+      const vid = document.getElementById('homepageArchitectureVideo');
+      if (!vid) return;
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else if (vid.requestFullscreen) {
+        vid.requestFullscreen();
+      } else if (vid.webkitRequestFullscreen) {
+        vid.webkitRequestFullscreen();
+      } else if (vid.msRequestFullscreen) {
+        vid.msRequestFullscreen();
+      }
+    }
 
 
     function openCreateModal() { document.getElementById('createDealModal').classList.remove('hidden'); }

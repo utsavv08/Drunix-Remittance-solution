@@ -252,7 +252,7 @@
 
     </div>
 
-    <!-- Direct Embedded Video Showcase Section -->
+    <!-- Direct Embedded Video Showcase Section (Full Uncropped 16:9 Frame) -->
     <section class="bg-white rounded-2xl shadow-citi-card border border-slate-200/90 overflow-hidden">
       <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="space-y-1">
@@ -260,23 +260,27 @@
             <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-citi-primary border border-blue-200 text-[10px] font-bold uppercase tracking-wider">
               Institutional Video Showcase
             </span>
-            <span class="text-xs text-slate-400 font-mono">• Merged 4K/1080p Video</span>
+            <span class="text-xs text-slate-400 font-mono">• Full 16:9 Uncropped 4K/1080p</span>
           </div>
           <h3 class="text-base sm:text-lg font-extrabold text-citi-deep">CitiFlow Escrow — Institutional Execution & Smart Settlement</h3>
           <p class="text-xs text-slate-500">Live operational demonstration showcasing realistic institutional treasury flows, smart escrow DvP locking, and real-time execution.</p>
         </div>
         <div class="flex items-center gap-2 shrink-0">
-          <span class="text-[11px] px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 flex items-center gap-1.5">
+          <button onclick="toggleVideoFullscreen()" class="text-xs px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-citi-primary font-bold border border-blue-200 flex items-center gap-1.5 transition-all shadow-sm">
+            <span>⛶</span>
+            <span>Full Screen</span>
+          </button>
+          <span class="text-[11px] px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Direct Video Player
+            Direct 16:9 Player
           </span>
         </div>
       </div>
 
-      <div class="p-5 sm:p-6 bg-slate-50/60">
-        <!-- Direct Embedded Video Player -->
-        <div class="relative rounded-xl overflow-hidden bg-slate-950 shadow-lg aspect-video max-h-[460px] mx-auto w-full flex items-center justify-center border border-slate-800">
-          <video id="homepageArchitectureVideo" class="w-full h-full object-cover" controls autoplay loop muted playsinline>
+      <div class="p-4 sm:p-6 bg-slate-50/60">
+        <!-- Direct Embedded Video Player: Full Uncropped 16:9 Aspect Ratio -->
+        <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-slate-950 shadow-xl border border-slate-300/80 mx-auto flex items-center justify-center">
+          <video id="homepageArchitectureVideo" class="w-full h-full object-contain rounded-xl" controls autoplay loop muted playsinline>
             <source src="/videos/citiflow_showcase.mp4" type="video/mp4">
             Your browser does not support HTML5 video.
           </video>
@@ -677,8 +681,19 @@
       document.getElementById(`tabBtn${tab}`).className = 'py-3 px-4 text-xs font-extrabold flex items-center gap-2 border-b-2 border-citi-primary text-citi-primary transition-all';
     }
 
-    function openPaymentModal() { document.getElementById('paymentModal').classList.remove('hidden'); }
-    function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); }
+    function toggleVideoFullscreen() {
+      const vid = document.getElementById('homepageArchitectureVideo');
+      if (!vid) return;
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else if (vid.requestFullscreen) {
+        vid.requestFullscreen();
+      } else if (vid.webkitRequestFullscreen) {
+        vid.webkitRequestFullscreen();
+      } else if (vid.msRequestFullscreen) {
+        vid.msRequestFullscreen();
+      }
+    }
 
 
     function openCreateModal() { document.getElementById('createDealModal').classList.remove('hidden'); }
